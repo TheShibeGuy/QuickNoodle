@@ -1,0 +1,13 @@
+C:\Users\Blake\source\repos\QuickNoodle\QuickNoodle\bin\Debug\QuickNoodle.exe.config
+C:\Users\Blake\source\repos\QuickNoodle\QuickNoodle\bin\Debug\QuickNoodle.exe
+C:\Users\Blake\source\repos\QuickNoodle\QuickNoodle\bin\Debug\QuickNoodle.pdb
+C:\Users\Blake\source\repos\QuickNoodle\QuickNoodle\obj\Debug\QuickNoodle.csprojAssemblyReference.cache
+C:\Users\Blake\source\repos\QuickNoodle\QuickNoodle\obj\Debug\QuickNoodle.Form1.resources
+C:\Users\Blake\source\repos\QuickNoodle\QuickNoodle\obj\Debug\QuickNoodle.Properties.Resources.resources
+C:\Users\Blake\source\repos\QuickNoodle\QuickNoodle\obj\Debug\QuickNoodle.csproj.GenerateResource.cache
+C:\Users\Blake\source\repos\QuickNoodle\QuickNoodle\obj\Debug\QuickNoodle.csproj.CoreCompileInputs.cache
+C:\Users\Blake\source\repos\QuickNoodle\QuickNoodle\obj\Debug\QuickNoodle.exe
+C:\Users\Blake\source\repos\QuickNoodle\QuickNoodle\obj\Debug\QuickNoodle.pdb
+C:\Users\Blake\source\repos\QuickNoodle\QuickNoodle\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Blake\source\repos\QuickNoodle\QuickNoodle\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Blake\source\repos\QuickNoodle\QuickNoodle\obj\Debug\QuickNoodle.csproj.CopyComplete
