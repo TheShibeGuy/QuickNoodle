@@ -416,18 +416,19 @@ namespace QuickNoodle
             {
                 dynamic _event = map._events[i];
                 float _time = _event._time;
-                if (isNull)
-                    continue;
-                if (!_event.ContainsKey("_customData"))
-                {
-                    _event.Add(new JProperty("_customData", new JObject()));
-                }
-                if (_event._type == 12 || _event._type == 13)
-                    continue;
                 if (time <= _time /* if time of bookmark is less than time of note && _time < _nextTime*/)
                 {
 
-                    switch (_event._value)
+                    if (isNull)
+                        continue;
+                    if (!_event.ContainsKey("_customData"))
+                    {
+                        _event.Add(new JProperty("_customData", new JObject()));
+                    }
+                    if (_event._type == 12 || _event._type == 13)
+                        continue;
+                    
+                    switch (int.Parse(_event._value.ToString()))
                     {
                         case 1:
                             if (!_event._customData.ContainsKey("_color"))
@@ -436,8 +437,10 @@ namespace QuickNoodle
                             }
                             else
                             {
-                                _event._customData._color = blues;
+                                _event._customData._color = new JArray(blues);
                             }
+                            map._events[i] = _event;
+                            Console.WriteLine(_event._customData.ContainsKey("_color"));
                             break;
                         case 2:
                             if (!_event._customData.ContainsKey("_color"))
@@ -446,8 +449,9 @@ namespace QuickNoodle
                             }
                             else
                             {
-                                _event._customData._color = blues;
+                                _event._customData._color = new JArray(blues);
                             }
+                            map._events[i] = _event;
                             break;
                         case 3:
                             if (!_event._customData.ContainsKey("_color"))
@@ -456,8 +460,9 @@ namespace QuickNoodle
                             }
                             else
                             {
-                                _event._customData._color = blues;
+                                _event._customData._color = new JArray(blues);
                             }
+                            map._events[i] = _event;
                             break;
                         case 5:
                             if (!_event._customData.ContainsKey("_color"))
@@ -466,8 +471,9 @@ namespace QuickNoodle
                             }
                             else
                             {
-                                _event._customData._color = reds;
+                                _event._customData._color = new JArray(reds);
                             }
+                            map._events[i] = _event;
                             break;
                         case 6:
                             if (!_event._customData.ContainsKey("_color"))
@@ -476,8 +482,9 @@ namespace QuickNoodle
                             }
                             else
                             {
-                                _event._customData._color = reds;
+                                _event._customData._color = new JArray(reds);
                             }
+                            map._events[i] = _event;
                             break;
                         case 7:
                             if (!_event._customData.ContainsKey("_color"))
@@ -486,11 +493,13 @@ namespace QuickNoodle
                             }
                             else
                             {
-                                _event._customData._color = reds;
+                                _event._customData._color = new JArray(reds);
                             }
+                            map._events[i] = _event;
                             break;
                     }
-                    map._events[i] = _event;
+                    
+                    
                 }
 
 
