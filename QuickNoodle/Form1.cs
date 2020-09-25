@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -74,8 +75,8 @@ namespace QuickNoodle
         {
             List<string> marks = new List<string>();
             int index = 0;
-            
-            foreach(dynamic bookmark in bookmarks)
+            Stopwatch length = Stopwatch.StartNew();
+            foreach (dynamic bookmark in bookmarks)
             {
                 int l = bookmarks.Count;
                 dynamic nextMark = bookmarks[index == l-1 ? index : index + 1];
@@ -104,6 +105,7 @@ namespace QuickNoodle
                 foreach (string command in commands)
                 {
                     // "r=0.0, 0.0, 0.0"
+                    welcome.Text = $"Processing {index}th bookmark";
                     string[] fullCommand = command.Split('=');
                     // {"r", "0.0, 0.0, 0.0"}
                     bool contains = arguments.Contains(fullCommand[0]);
@@ -278,13 +280,14 @@ namespace QuickNoodle
 
                         }
 
-                        welcome.Text = $"Processing {index}th bookmark";
+                        
 
                         
                         // ForEach(Console.WriteLine);
                         //Console.WriteLine($"Right colors: R: {blues[0].ToString()} G: {blues[1].ToString()} B: {blues[2].ToString()} ::: Left colors: R: {reds[0].ToString()} G: {reds[1].ToString()} B: {reds[2].ToString()}");
                         //Console.WriteLine($"");
                     }
+                    
                 }
 
                 newProcessing(reds, blues, worldRotation, noteRotation, noteSpawnOffset, noteJumpSpeed, isNull, time, map, nextMark);
@@ -295,7 +298,7 @@ namespace QuickNoodle
                 });*/
             }
 
-
+            welcome.Text = $"Processed {map._events.Count} lighting events, and {map._notes.Count} notes in {length.Elapsed.Seconds} seconds.";
 
 
             return marks;
@@ -322,14 +325,7 @@ namespace QuickNoodle
                     {
                             _note.Add(new JProperty("_customData", new JObject()));
                     }
-                    /*                        {
-                            new JProperty("_rotation", worldRotation),
-                            new JProperty("_localRotation", noteRotation),
-                            new JProperty("_noteJumpMovementSpeed", noteJumpSpeed),
-                            new JProperty("_noteJumpStartBeatOffset", noteSpawnOffset),
-                            new JProperty("_color", reds)
-                        }
-                   */
+                    #region spaghetti
                     if (!_note._customData.ContainsKey("_rotation"))
                     {
                         _note._customData.Add(new JProperty("_rotation", worldRotation));
@@ -370,7 +366,7 @@ namespace QuickNoodle
                     {
                         _note._customData._color = reds;
                     }
-
+                    #endregion
                     // The note happens after the currently selected bookmark.
                     // type 0 is red, type 1 is blue
                     if (_note._type == 0)
@@ -413,6 +409,90 @@ namespace QuickNoodle
                 }
 
                 
+            }
+            for ( int i = 0; i < map._events.Count; i++)
+            {
+                dynamic _event = map._events[i];
+                float _time = _event._time;
+                if (isNull)
+                    continue;
+                if (!_event.ContainsKey("_customData"))
+                {
+                    _event.Add(new JProperty("_customData", new JObject()));
+                }
+                if (_event._type == 12 || _event._type == 13)
+                    continue;
+                if (time <= _time /* if time of bookmark is less than time of note && _time < _nextTime*/)
+                {
+
+                    switch (_event._value)
+                    {
+                        case 1:
+                            if (!_event._customData.ContainsKey("_color"))
+                            {
+                                _event._customData.Add(new JProperty("_color", blues));
+                            }
+                            else
+                            {
+                                _event._customData._color = blues;
+                            }
+                            break;
+                        case 2:
+                            if (!_event._customData.ContainsKey("_color"))
+                            {
+                                _event._customData.Add(new JProperty("_color", blues));
+                            }
+                            else
+                            {
+                                _event._customData._color = blues;
+                            }
+                            break;
+                        case 3:
+                            if (!_event._customData.ContainsKey("_color"))
+                            {
+                                _event._customData.Add(new JProperty("_color", blues));
+                            }
+                            else
+                            {
+                                _event._customData._color = blues;
+                            }
+                            break;
+                        case 5:
+                            if (!_event._customData.ContainsKey("_color"))
+                            {
+                                _event._customData.Add(new JProperty("_color", reds));
+                            }
+                            else
+                            {
+                                _event._customData._color = reds;
+                            }
+                            break;
+                        case 6:
+                            if (!_event._customData.ContainsKey("_color"))
+                            {
+                                _event._customData.Add(new JProperty("_color", reds));
+                            }
+                            else
+                            {
+                                _event._customData._color = reds;
+                            }
+                            break;
+                        case 7:
+                            if (!_event._customData.ContainsKey("_color"))
+                            {
+                                _event._customData.Add(new JProperty("_color", reds));
+                            }
+                            else
+                            {
+                                _event._customData._color = reds;
+                            }
+                            break;
+                    }
+                    map._events[i] = _event;
+                }
+
+
+
             }
         }
         private List<string> parseText(String s, float time)
@@ -631,13 +711,14 @@ namespace QuickNoodle
             
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
-            saveFileDialog1.Filter = "dat files (*.dat)|*.dat";
+            saveFileDialog1.Filter = "Beat Saber Map files (*.dat)|*.dat";
             saveFileDialog1.FilterIndex = 1;
             saveFileDialog1.RestoreDirectory = true;
 
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 File.WriteAllText(saveFileDialog1.FileName, mapfile);
+                welcome.Text = "Finished saving file.";
             }
 
         }

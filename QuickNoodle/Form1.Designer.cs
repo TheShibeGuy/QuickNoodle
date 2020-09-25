@@ -36,9 +36,6 @@
             this.welcome = new System.Windows.Forms.Label();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.button5 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -66,7 +63,7 @@
             // 
             this.button3.Location = new System.Drawing.Point(-1, 87);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(216, 82);
+            this.button3.Size = new System.Drawing.Size(438, 82);
             this.button3.TabIndex = 3;
             this.button3.Text = "convert";
             this.button3.UseVisualStyleBackColor = true;
@@ -77,7 +74,7 @@
             this.button4.BackgroundImage = global::QuickNoodle.Properties.Resources.the_real_bckill;
             this.button4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.button4.Font = new System.Drawing.Font("Century Gothic", 72F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button4.Location = new System.Drawing.Point(221, 87);
+            this.button4.Location = new System.Drawing.Point(1700, 950);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(216, 82);
             this.button4.TabIndex = 4;
@@ -108,41 +105,12 @@
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.button5);
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.textBox1);
             this.panel1.Controls.Add(this.checkBox1);
             this.panel1.Controls.Add(this.welcome);
             this.panel1.Location = new System.Drawing.Point(-1, 175);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(438, 100);
             this.panel1.TabIndex = 7;
-            // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(355, 51);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(44, 20);
-            this.button5.TabIndex = 8;
-            this.button5.Text = "pick";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(218, 35);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(55, 13);
-            this.label1.TabIndex = 8;
-            this.label1.Text = "Output file";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(221, 51);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(128, 20);
-            this.textBox1.TabIndex = 7;
             // 
             // Form1
             // 
@@ -174,9 +142,6 @@
         private System.Windows.Forms.Label welcome;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
     }
 }
 
