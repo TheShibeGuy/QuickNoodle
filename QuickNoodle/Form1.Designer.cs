@@ -117,12 +117,12 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 120);
+            this.label1.Location = new System.Drawing.Point(3, 107);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(323, 39);
+            this.label1.Size = new System.Drawing.Size(227, 52);
             this.label1.TabIndex = 7;
-            this.label1.Text = "This program does not add Noodle Extensions to the requirements, \r\nwhile it is re" +
-    "quired \r\nplease add it.";
+            this.label1.Text = "This program does not add Noodle Extensions,\r\n or Chroma to the requirements, \r\nw" +
+    "hile they are required \r\nplease add them.";
             this.label1.Click += new System.EventHandler(this.label1_Click_1);
             // 
             // Form1

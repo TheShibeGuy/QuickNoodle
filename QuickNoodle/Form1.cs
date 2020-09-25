@@ -21,6 +21,8 @@ namespace QuickNoodle
         public Form1()
         {
             InitializeComponent();
+            MessageBoxManager.No = "Ok";
+            MessageBoxManager.Register();
         }
         dynamic mapObject;
         
@@ -699,8 +701,7 @@ namespace QuickNoodle
         }
         private void label1_Click(object sender, EventArgs e)
         {
-            MessageBoxManager.No = "Ok";
-            MessageBoxManager.Register();
+
             MessageBox.Show("Why the fuck did you click the text???", "Retard", MessageBoxButtons.YesNo);
         }
 
@@ -730,7 +731,7 @@ namespace QuickNoodle
 
         private void label1_Click_1(object sender, EventArgs e)
         {
-
+            MessageBox.Show("Stop clicking my text!!!!", "Baby", MessageBoxButtons.YesNo);
         }
         // public static bool IsNumeric(this string text) => double.TryParse(text, out _);
     }
