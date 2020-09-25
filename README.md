@@ -1,6 +1,7 @@
 # QuickNoodle
 Quickly apply basic Noodle Extension modifiers for sections of a map.
-
+# Note
+This does not add "Noodle Extensions" to the list of requirements, while it is a requirement, so you have to do that yourself.
 # Documentation
 <br>
 B: value of blue notes and lighting events. (ex: B=1.0,0.2,0.4) (float with a range 0-1. 255 would = 1.0 and 0 would = 0.0) <br>
@@ -23,8 +24,11 @@ standard: skips placing any custom data for that bookmark until the next one (bo
 Full bookmark example: R=0.1,0.2,0.9 NoteRotation=0,0,10 WorldRotation=0,90,0 njs=25 offset=0.1<br>
 <br>
 Syntax is capitalisation frendly.
-
+# Usage
+Open QuickNoodle, click "Open" and select your map file with bookmarks. <i>thats it!</i>. <br>
+now save your file wherever you want.
 # Build yourself
+download everything <br>
 use vs 2017<br>
 it requires newtonsoft.json <br>
 build it <br>
