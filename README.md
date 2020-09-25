@@ -4,10 +4,10 @@ Quickly apply basic Noodle Extension modifiers for sections of a map.
 # Documentation
 <br>
 B: value of blue notes and lighting events. (ex: B=1.0,0.2,0.4) (float with a range 0-1. 255 would = 1.0 and 0 would = 0.0) <br>
-__planned future support for hex color codes, and also rgb values.__<br>
+**planned future support for hex color codes, and also rgb values.**<br>
 <br>
 R: value of red notes and lighting events. (ex: R=0.1,0.2,0.8) (float with a range 0-1. 255 would = 1.0 and 0 would = 0.0) <br>
-__planned future support for hex color codes, and also rgb values.__<br>
+**planned future support for hex color codes, and also rgb values.**<br>
 <br>
 NJS: NJS of the notes bombs, and walls. (ex: njs=25) (float. will change the offset like normal. ex: a 250 bpm map with a custom njs of 10 will make the notes spawn at a distance of 19 away from the player. you are going to want to add custom offset to compinsate for that.)<br>
 <br>
