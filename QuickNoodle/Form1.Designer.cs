@@ -36,6 +36,7 @@
             this.welcome = new System.Windows.Forms.Label();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -61,7 +62,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(-1, 87);
+            this.button3.Location = new System.Drawing.Point(1000, 87);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(438, 82);
             this.button3.TabIndex = 3;
@@ -95,22 +96,34 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(3, 51);
+            this.checkBox1.Location = new System.Drawing.Point(336, 17);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(154, 17);
+            this.checkBox1.Size = new System.Drawing.Size(88, 17);
             this.checkBox1.TabIndex = 6;
-            this.checkBox1.Text = "Delete old Chroma events?";
+            this.checkBox1.Text = "Placeholder?";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.checkBox1);
             this.panel1.Controls.Add(this.welcome);
-            this.panel1.Location = new System.Drawing.Point(-1, 175);
+            this.panel1.Location = new System.Drawing.Point(-1, 87);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(438, 100);
+            this.panel1.Size = new System.Drawing.Size(438, 188);
             this.panel1.TabIndex = 7;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 120);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(323, 39);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "This program does not add Noodle Extensions to the requirements, \r\nwhile it is re" +
+    "quired \r\nplease add it.";
+            this.label1.Click += new System.EventHandler(this.label1_Click_1);
             // 
             // Form1
             // 
@@ -142,6 +155,7 @@
         private System.Windows.Forms.Label welcome;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label1;
     }
 }
 

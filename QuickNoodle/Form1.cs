@@ -332,7 +332,7 @@ namespace QuickNoodle
                     }
                     else
                     {
-                        _note._customData._rotation = worldRotation;
+                        _note._customData._rotation = new JArray(worldRotation);
                     }
                     if (!_note._customData.ContainsKey("_localRotation"))
                     {
@@ -340,7 +340,7 @@ namespace QuickNoodle
                     }
                     else
                     {
-                        _note._customData._localRotation = noteRotation;
+                        _note._customData._localRotation = new JArray(noteRotation);
                     }
                     if (!_note._customData.ContainsKey("_noteJumpMovementSpeed"))
                     {
@@ -348,7 +348,7 @@ namespace QuickNoodle
                     }
                     else
                     {
-                        _note._customData._noteJumpMovementSpeed = noteJumpSpeed;
+                        _note._customData._noteJumpMovementSpeed = new JValue(noteJumpSpeed);
                     }
                     if (!_note._customData.ContainsKey("_noteJumpStartBeatOffset"))
                     {
@@ -356,7 +356,7 @@ namespace QuickNoodle
                     }
                     else
                     {
-                        _note._customData._noteJumpStartBeatOffset = noteSpawnOffset;
+                        _note._customData._noteJumpStartBeatOffset = new JValue(noteSpawnOffset);
                     }
                     if (!_note._customData.ContainsKey("_color"))
                     {
@@ -364,7 +364,7 @@ namespace QuickNoodle
                     }
                     else
                     {
-                        _note._customData._color = reds;
+                        _note._customData._color = new JArray(reds);
                     }
                     #endregion
                     // The note happens after the currently selected bookmark.
@@ -724,6 +724,11 @@ namespace QuickNoodle
         }
 
         private void button5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click_1(object sender, EventArgs e)
         {
 
         }
