@@ -24,6 +24,7 @@ standard: skips placing any custom data for that bookmark until the next one (bo
 Full bookmark example: R=0.1,0.2,0.9 NoteRotation=0,0,10 WorldRotation=0,90,0 njs=25 offset=0.1<br>
 <br>
 Syntax is capitalisation frendly.
+
 # Usage
 Open QuickNoodle, click "Open" and select your map file with bookmarks. <i>thats it!</i>. <br>
 now save your file wherever you want.
