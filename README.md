@@ -28,6 +28,9 @@ Syntax is capitalisation frendly.
 # Usage
 Open QuickNoodle, click "Open" and select your map file with bookmarks. <i>thats it!</i>. <br>
 now save your file wherever you want.
+
+# Help
+idk what to put here but if youre having issues dm me on discord <a href="https://discord.com/channels/@me/269374685987340288">here</a>
 # Build yourself
 download everything <br>
 use vs 2017<br>
