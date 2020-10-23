@@ -11,10 +11,9 @@ Please forgive my terrible syntaxes
 #### RN: the same syntax as [B] or [R] but Specifically for Red Notes (will not chromatise Red Lights) (can applied using a bookmark)
 #### BL: the same syntax as [B] or [R] but Specifically for Blue Lights (will not chromatise Blue Notes) (can applied using a bookmark)
 #### RL: the same syntax as [B] or [R] but Specifically for Red Lights (will not chromatise Red Notes) (can applied using a bookmark)
-### Note:
-#### BN, RN, BL, and RL will override B and R.
-#### * not implemented yet.
-#### Syntax is capitalisation frendly.
+##### BN, RN, BL, and RL will override B and R.
+##### * not implemented yet.
+##### Syntax is capitalisation frendly.
 ## Misc
 #### NJS: Note Jump Speed of the notes bombs, and walls.<br>
 #### Offset: spawn offset for notes, bombs, and walls. (Ex: offset=0.1) (float)<br>
