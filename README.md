@@ -27,8 +27,12 @@ Please forgive my terrible syntaxes
 
 
 # Usage
-Open QuickNoodle, click "Open" and select your map file with bookmarks. <i>thats it!</i>. <br>
-now save your file wherever you want.
+#### Open QN and select your map file of choice.
+##### Has to have bookmarks of some sort or else it will be angry
+#### ~~import .QUN/YAML file~~ (soon™)
+#### Click "convert"
+##### Wait.
+#### Save your file
 
 # Help
 idk what to put here but if youre having issues dm me on discord shobie#1577
