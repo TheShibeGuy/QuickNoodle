@@ -96,7 +96,7 @@ namespace QuickNoodle
                 int l = bookmarks.Count;
                 dynamic nextMark = bookmarks[index == l-1 ? index : index + 1];
                 index++;
-                log.WriteLine($"{index}st bookmark. {Environment.NewLine}");
+                log.WriteLine($"{Environment.NewLine}{index}st bookmark.");
                 welcome.Text = $"Processing {index}th bookmark.";
                 float time = float.Parse(bookmark._time.ToString());
                 string name = bookmark._name.ToString().ToLower();
@@ -435,7 +435,7 @@ namespace QuickNoodle
                     }
                     else
                     {
-                        log.WriteLine("Unrecognized command, skipping bookmark.");
+                        log.WriteLine($"Unrecognized command: {command}, skipping bookmark.");
                         isNull = true;
                     }
                     
@@ -443,11 +443,15 @@ namespace QuickNoodle
                 //if (reds[0] == -1.0f && blues[0] == -1.0f && worldRotation == new float[3] { 0.0f, 0.0f, 0.0f } && noteRotation == new float[3] { 0.0f, 0.0f, 0.0f } && noteSpawnOffset == -10.25f && noteJumpSpeed == -1)
                 //    isNull = true;
                 var mapCopy = map;
-                
-                Thread thread = new Thread(() => newProcessing(reds, blues, noteReds, noteBlues, eventReds, eventBlues, worldRotation, noteRotation, noteSpawnOffset, noteJumpSpeed, isNull, time, mapCopy, nextMark, index));
-                thread.IsBackground = true;
-                thread.Start();
-                
+
+                newProcessing(reds, blues, noteReds, noteBlues, eventReds, eventBlues, worldRotation, noteRotation, noteSpawnOffset, noteJumpSpeed, isNull, time, mapCopy, nextMark, index);
+                // Uncomment for multithreading
+                // If someone wants to actually try and get this working go ahead but i really burnt myself out trying to get it to work
+
+                //Thread thread = new Thread(() => newProcessing(reds, blues, noteReds, noteBlues, eventReds, eventBlues, worldRotation, noteRotation, noteSpawnOffset, noteJumpSpeed, isNull, time, mapCopy, nextMark, index));
+                //thread.IsBackground = true;
+                //thread.Start();
+
                 /*parsedCommands.ForEach(Console.WriteLine);
                 parsedCommands.ForEach(delegate(string command)
                 {
@@ -584,7 +588,7 @@ namespace QuickNoodle
                     // type 0 is red, type 1 is blue
                     if (_note._type == 0)
                     {
-                        if(noteReds[0] > 0)
+                        if(noteReds[0] >= 0)
                         {
                             lock (noteLock)
                             {
@@ -595,7 +599,7 @@ namespace QuickNoodle
                         {
                             lock (noteLock)
                             {
-                                if (reds[0] > 0)
+                                if (reds[0] >= 0)
                                 {
                                     _note._customData._color = new JArray(reds);
                                 }
@@ -609,7 +613,7 @@ namespace QuickNoodle
                         
                     } else if (_note._type == 1)
                     {
-                        if (noteBlues[0] > 0)
+                        if (noteBlues[0] >= 0)
                         {
                             lock (noteLock)
                             {
@@ -620,7 +624,7 @@ namespace QuickNoodle
                         {
                             lock (noteLock)
                             {
-                                if (blues[0] > 0)
+                                if (blues[0] >= 0)
                                 {
                                     _note._customData._color = new JArray(blues);
                                 }
@@ -689,18 +693,14 @@ namespace QuickNoodle
                         case 1: case 2: case 3:
                             lock (eventLock)
                             {
-                                if (!_event._customData.ContainsKey("_color"))
+                                if (eventBlues[0] >= 0)
                                 {
-                                    if (eventBlues[0] > 0)
-                                    {
-                                        Utilities.addOrUpdateElement(_event._customData, "_color", eventBlues, Utilities.JType.JArray);
+                                    Utilities.addOrUpdateElement(_event._customData, "_color", eventBlues, Utilities.JType.JArray);
 
-                                    }
-                                    else if (blues[0] > 0)
-                                    {
-                                        Utilities.addOrUpdateElement(_event._customData, "_color", blues, Utilities.JType.JArray);
-                                    }
-
+                                }
+                                else if (blues[0] >= 0)
+                                {
+                                    Utilities.addOrUpdateElement(_event._customData, "_color", blues, Utilities.JType.JArray);
                                 }
                             }
                             lock (balanceLock)
@@ -714,18 +714,15 @@ namespace QuickNoodle
                         case 5: case 6: case 7:
                             lock (eventLock)
                             {
-                                    if (!_event._customData.ContainsKey("_color"))
-                                    {
-                                        if(eventReds[0] > 0)
-                                        {
-                                            Utilities.addOrUpdateElement(_event._customData, "_color", eventReds, Utilities.JType.JArray);
-                                            
-                                        } else if (reds[0] > 0)
-                                        {
-                                            Utilities.addOrUpdateElement(_event._customData, "_color", reds, Utilities.JType.JArray);
-                                        }
-                                       
-                                    }
+                                if (eventReds[0] >= 0)
+                                {
+                                    Utilities.addOrUpdateElement(_event._customData, "_color", eventReds, Utilities.JType.JArray);
+
+                                }
+                                else if (reds[0] >= 0)
+                                {
+                                    Utilities.addOrUpdateElement(_event._customData, "_color", reds, Utilities.JType.JArray);
+                                }
                             }
 
                             
@@ -746,6 +743,9 @@ namespace QuickNoodle
 
 
             }
+            // fuck you 
+            // you dont get comments
+            // definitely not just lazy
             for ( int i = 0; i < mapCopy._obstacles.Count; i++)
             {
                 dynamic _wall = mapCopy._obstacles[i];
