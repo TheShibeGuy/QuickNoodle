@@ -170,6 +170,7 @@ namespace QuickNoodle
                                     {
                                         log.WriteLine($"Red Colors: {noteRed[0]}, {noteRed[1]}, {noteRed[2]}");
                                     }
+
                                 }
                                 break;
                             case "nb":
@@ -444,13 +445,13 @@ namespace QuickNoodle
                 //    isNull = true;
                 var mapCopy = map;
 
-                newProcessing(reds, blues, noteReds, noteBlues, eventReds, eventBlues, worldRotation, noteRotation, noteSpawnOffset, noteJumpSpeed, isNull, time, mapCopy, nextMark, index);
+                // newProcessing(reds, blues, noteReds, noteBlues, eventReds, eventBlues, worldRotation, noteRotation, noteSpawnOffset, noteJumpSpeed, isNull, time, mapCopy, nextMark, index);
                 // Uncomment for multithreading
                 // If someone wants to actually try and get this working go ahead but i really burnt myself out trying to get it to work
 
-                //Thread thread = new Thread(() => newProcessing(reds, blues, noteReds, noteBlues, eventReds, eventBlues, worldRotation, noteRotation, noteSpawnOffset, noteJumpSpeed, isNull, time, mapCopy, nextMark, index));
-                //thread.IsBackground = true;
-                //thread.Start();
+                Thread thread = new Thread(() => newProcessing(reds, blues, noteReds, noteBlues, eventReds, eventBlues, worldRotation, noteRotation, noteSpawnOffset, noteJumpSpeed, isNull, time, mapCopy, nextMark, index));
+                thread.IsBackground = true;
+                thread.Start();
 
                 /*parsedCommands.ForEach(Console.WriteLine);
                 parsedCommands.ForEach(delegate(string command)
