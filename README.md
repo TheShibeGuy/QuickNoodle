@@ -40,5 +40,6 @@ idk what to put here but if youre having issues dm me on discord shobie#1577
 - [x] 1-255 RGB Color support
 - [ ] Move Away from bookmarks to QUN files
 - [ ] Support for hex colors
-- [ ] Add wall colors, njs, offset (this is really easy just not a priority)
+- [x] Add wall njs, offset (this is really easy just not a priority)
+- [ ] Add wall colors. (also super easy)
 - [ ] Animation (big task)
