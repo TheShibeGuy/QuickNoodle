@@ -4,6 +4,7 @@ Quickly apply basic Noodle Extension modifiers for sections of a map.
 This does not add "Noodle Extensions" to the list of requirements, while it is a requirement, so you have to do that yourself.
 # Documentation
 Please forgive my terrible syntaxes 
+Click [here](https://github.com/ShibeGuy/QuickNoodle/AnimationDocs.md) for animation docs.
 ## Colors
 #### B: value of Blue Notes and Lighting Events. (ex: B=0,128,255 OR B=#0080ff*) (float. with a range 0-255 OR #00000-#ffffff*) (can applied using a bookmark)
 #### R: value of Red Notes and Lighting Events. (ex: B=255,128,0 OR B=#ff8000*) (float. with a range 0-255 OR #00000-#ffffff*) (can applied using a bookmark)
