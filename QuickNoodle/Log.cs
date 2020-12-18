@@ -39,5 +39,9 @@ namespace QuickNoodle
             logbox.Text += s + Environment.NewLine;
         }
 
+        private void logbox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

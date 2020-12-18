@@ -31,6 +31,7 @@ namespace QuickNoodle
         private static readonly object balanceLock = new object();
         private static readonly object eventLock = new object();
         private static readonly object noteLock = new object();
+        private static readonly object wallLock = new object();
 
         private void Button1_Click(object sender, EventArgs e)
         {
@@ -100,7 +101,7 @@ namespace QuickNoodle
                 welcome.Text = $"Processing {index}th bookmark.";
                 float time = float.Parse(bookmark._time.ToString());
                 string name = bookmark._name.ToString().ToLower();
-                string[] arguments = new string[] { "njs", "offset", "r", "b", "worldrotation", "noterotation", "standard", "nr", "nb", "lr", "lb" };
+                string[] arguments = new string[] { "njs", "offset", "r", "b", "wallcolor", "worldrotation", "noterotation", "standard", "nr", "nb", "lr", "lb", "wc" };
 
                 string[] commands = name.Split(' ');
                 List<string> parsedCommands = new List<string>();
@@ -112,6 +113,8 @@ namespace QuickNoodle
 
                 float[] noteReds = new float[3] { -1, -1, -1 };
                 float[] noteBlues = new float[3] { -1, -1, -1 };
+
+                float[] wallColor = new float[3] { -1, -1, -1 };
 
                 float[] eventReds = new float[3] { -1, -1, -1 };
                 float[] eventBlues = new float[3] { -1, -1, -1 };
@@ -137,14 +140,31 @@ namespace QuickNoodle
                         string[] commandAndArgs = command.Split('=');
                         string args = commandAndArgs[1];
                         JArray array = new JArray();
-
-
+                        Console.WriteLine(args);
+                        int[] argHex;
+                        if (args.StartsWith("#"))
+                        {
+                            argHex = Utilities.DecodeHexColor(args);
+                        } else
+                        {
+                            argHex = new int[] { -1 , -1, -1 };
+                        }
+                        
                         switch (commandAndArgs[0])
                         {
+                            #region NoteColors
                             case "nr":
                                 string[] noteRed = args.Split(',');
                                 if (noteRed.Length != 3)
                                 {
+                                    
+                                    
+                                    
+                                    if(argHex[0] != -1)
+                                    {
+                                        noteReds = argHex.Select(x => ((float) x) / 255).ToArray();
+                                        break;
+                                    }
                                     log.WriteLine("Note Red color only has one value, skipping");
                                     noteReds = new float[3] { -1, -1, -1 };
                                     break;
@@ -156,7 +176,7 @@ namespace QuickNoodle
 
                                     if (float.TryParse(flot, out float fa))
                                     {
-                                        reds[i] = fa / 255;
+                                        noteReds[i] = fa / 255;
 
                                     }
                                     else
@@ -170,12 +190,18 @@ namespace QuickNoodle
                                     {
                                         log.WriteLine($"Red Colors: {noteRed[0]}, {noteRed[1]}, {noteRed[2]}");
                                     }
+
                                 }
                                 break;
                             case "nb":
                                 string[] noteBlue = args.Split(',');
                                 if (noteBlue.Length != 3)
                                 {
+                                    if (argHex[0] != -1)
+                                    {
+                                        noteReds = argHex.Select(x => ((float)x) / 255).ToArray();
+                                        break;
+                                    }
                                     log.WriteLine("Note blue color only has one value, skipping");
                                     noteBlues = new float[3] { -1, -1, -1 };
                                     break;
@@ -207,6 +233,11 @@ namespace QuickNoodle
                                 string[] eventRed = args.Split(',');
                                 if (eventRed.Length != 3)
                                 {
+                                    if (argHex[0] != -1)
+                                    {
+                                        noteReds = argHex.Select(x => ((float)x) / 255).ToArray();
+                                        break;
+                                    }
                                     log.WriteLine("Event Red color only has one value, skipping");
                                     eventReds = new float[3] { -1, -1, -1 };
                                     break;
@@ -238,6 +269,11 @@ namespace QuickNoodle
                                 string[] eventBlue = args.Split(',');
                                 if (eventBlue.Length != 3)
                                 {
+                                    if (argHex[0] != -1)
+                                    {
+                                        noteReds = argHex.Select(x => ((float)x) / 255).ToArray();
+                                        break;
+                                    }
                                     log.WriteLine("Event Blue color only has one value, skipping");
                                     eventBlues = new float[3] { -1, -1, -1 };
                                     break;
@@ -270,6 +306,11 @@ namespace QuickNoodle
                                 string[] red = args.Split(',');
                                 if (red.Length != 3)
                                 {
+                                    if (argHex[0] != -1)
+                                    {
+                                        noteReds = argHex.Select(x => ((float)x) / 255).ToArray();
+                                        break;
+                                    }
                                     log.WriteLine("Red color only has one value, skipping");
                                     reds = new float[3] { -1, -1, -1 };
                                     break;
@@ -303,6 +344,11 @@ namespace QuickNoodle
 
                                 if (blue.Length != 3)
                                 {
+                                    if (argHex[0] != -1)
+                                    {
+                                        noteReds = argHex.Select(x => ((float)x) / 255).ToArray();
+                                        break;
+                                    }
                                     log.WriteLine("Blue color only has one value, skipping");
                                     blues = new float[3] { -1, -1, -1 };
                                     break;
@@ -328,6 +374,8 @@ namespace QuickNoodle
                                     }
                                 }
                                 break;
+                            #endregion
+                            #region Rotations
                             case "worldrotation":
                                 string[] wR = args.Split(',');
 
@@ -389,7 +437,8 @@ namespace QuickNoodle
                                     }
                                 }
                                 break;
-
+                            #endregion
+                            #region Misc
                             case "standard":
                                 isNull = true;
                                 log.WriteLine($"isNull: true ");
@@ -420,7 +469,37 @@ namespace QuickNoodle
                                     break;
                                 }
                                 break;
+                            case "wc":
+                            case "wallcolor":
+                                string[] wallColors = args.Split(',');
+                                if (wallColors.Length != 3)
+                                {
+                                    log.WriteLine("wallcolor color only has one value, skipping");
+                                    wallColor = new float[3] { -1, -1, -1 };
+                                    break;
+                                }
 
+                                for (int i = 0; i < 3; i++)
+                                {
+                                    string flot = wallColors[i];
+
+                                    if (float.TryParse(flot, out float fa))
+                                    {
+                                        wallColor[i] = fa / 255;
+
+                                    }
+                                    else
+                                    {
+                                        log.WriteLine($"Error whilst decoding wall colors on bookmark at {time}, skipping");
+                                        wallColor = new float[3] { -1, -1, -1 };
+
+                                        break;
+                                    }
+
+                                }
+                                log.WriteLine($"Wall Colors: {wallColor[0]}, {wallColor[1]}, {wallColor[2]}");
+                                break;
+                            #endregion
                             default:
                                 break;
 
@@ -444,13 +523,37 @@ namespace QuickNoodle
                 //    isNull = true;
                 var mapCopy = map;
 
-                newProcessing(reds, blues, noteReds, noteBlues, eventReds, eventBlues, worldRotation, noteRotation, noteSpawnOffset, noteJumpSpeed, isNull, time, mapCopy, nextMark, index);
+                // 
                 // Uncomment for multithreading
                 // If someone wants to actually try and get this working go ahead but i really burnt myself out trying to get it to work
+                // 
+                if (multithreading.Checked)
+                {
+                    Thread thread = new Thread(() => newProcessing(
+                        reds,
+                        blues, 
+                        noteReds, 
+                        noteBlues, 
+                        eventReds, 
+                        eventBlues, 
+                        wallColor, 
+                        worldRotation, 
+                        noteRotation, 
+                        noteSpawnOffset, 
+                        noteJumpSpeed, 
+                        isNull, 
+                        time, 
+                        mapCopy, 
+                        nextMark, 
+                        index));
+                    thread.IsBackground = true;
+                    thread.Start();
+                }
+                else
+                {
+                    newProcessing(reds, blues, noteReds, noteBlues, eventReds, eventBlues, wallColor, worldRotation, noteRotation, noteSpawnOffset, noteJumpSpeed, isNull, time, mapCopy, nextMark, index);
+                }
 
-                //Thread thread = new Thread(() => newProcessing(reds, blues, noteReds, noteBlues, eventReds, eventBlues, worldRotation, noteRotation, noteSpawnOffset, noteJumpSpeed, isNull, time, mapCopy, nextMark, index));
-                //thread.IsBackground = true;
-                //thread.Start();
 
                 /*parsedCommands.ForEach(Console.WriteLine);
                 parsedCommands.ForEach(delegate(string command)
@@ -499,7 +602,23 @@ namespace QuickNoodle
         }
 
         // Ignore my spaghetti please 
-        public void newProcessing(float[] reds, float[] blues, float[] noteReds, float[] noteBlues, float[] eventReds, float[] eventBlues, float[] worldRotation, float[] noteRotation, float noteSpawnOffset, float noteJumpSpeed, bool isNull, float time, dynamic mapCopy, dynamic next, int bookmarkNumber)
+        public void newProcessing(float[] reds, 
+            float[] blues, 
+            float[] noteReds, 
+            float[] noteBlues, 
+            float[] eventReds, 
+            float[] eventBlues, 
+            float[] wallColor,
+            float[] worldRotation,
+            float[] noteRotation, 
+            float noteSpawnOffset, 
+            float noteJumpSpeed, 
+            bool isNull, 
+            float time, 
+            dynamic mapCopy, 
+            dynamic next, 
+            int bookmarkNumber
+            )
         {
 
             // Start processing data
@@ -586,18 +705,17 @@ namespace QuickNoodle
                     #endregion
                     // The note happens after the currently selected bookmark.
                     // type 0 is red, type 1 is blue
-                    if (_note._type == 0)
+                    lock (noteLock)
                     {
-                        if(noteReds[0] >= 0)
+                        if (_note._type == 0)
                         {
-                            lock (noteLock)
+                            if (noteReds[0] >= 0)
                             {
+
                                 _note._customData._color = new JArray(noteReds);
+
                             }
-                        }
-                        else
-                        {
-                            lock (noteLock)
+                            else
                             {
                                 if (reds[0] >= 0)
                                 {
@@ -607,22 +725,20 @@ namespace QuickNoodle
                                 {
                                     _note._customData.Remove("_color");
                                 }
-                            }
-                        }
 
-                        
-                    } else if (_note._type == 1)
-                    {
-                        if (noteBlues[0] >= 0)
-                        {
-                            lock (noteLock)
-                            {
-                                _note._customData._color = new JArray(noteBlues);
                             }
+
+
                         }
-                        else
+                        else if (_note._type == 1)
                         {
-                            lock (noteLock)
+                            if (noteBlues[0] >= 0)
+                            {
+
+                                _note._customData._color = new JArray(noteBlues);
+
+                            }
+                            else
                             {
                                 if (blues[0] >= 0)
                                 {
@@ -632,19 +748,21 @@ namespace QuickNoodle
                                 {
                                     _note._customData.Remove("_color");
                                 }
+
                             }
+
                         }
-
                     }
-                    
 
 
 
 
-                    if (noteJumpSpeed > 0) { _note._customData._noteJumpMovementSpeed = noteJumpSpeed; } else { _note._customData.Remove("_noteJumpMovementSpeed"); }
+                    lock (noteLock)
+                    {
+                        if (noteJumpSpeed > 0) { _note._customData._noteJumpMovementSpeed = noteJumpSpeed; } else { _note._customData.Remove("_noteJumpMovementSpeed"); }
 
-                    if (noteSpawnOffset != -10.25) { _note._customData._noteJumpStartBeatOffset = noteSpawnOffset; } else { _note._customData.Remove("_noteJumpStartBeatOffset");  }
-
+                        if (noteSpawnOffset != -10.25) { _note._customData._noteJumpStartBeatOffset = noteSpawnOffset; } else { _note._customData.Remove("_noteJumpStartBeatOffset"); }
+                    }
 
                     //Console.WriteLine(_note);
 
@@ -682,17 +800,19 @@ namespace QuickNoodle
                         continue;
                     //Utilities.addOrUpdateElement(_event, "_customData", new JObject(), Utilities.JType.JObj);
 
-                    
+
                     // this is terrible btw 
                     // i'll fix this eventually but i'm lazy
 
                     // i fixed a little
-                    switch (int.Parse(_event._value.ToString()))
+                    lock (eventLock)
                     {
-                        // cases 1 2 3 are blue events
-                        case 1: case 2: case 3:
-                            lock (eventLock)
-                            {
+                        switch (int.Parse(_event._value.ToString()))
+                        {
+                            // cases 1 2 3 are blue events
+                            case 1:
+                            case 2:
+                            case 3:
                                 if (eventBlues[0] >= 0)
                                 {
                                     Utilities.addOrUpdateElement(_event._customData, "_color", eventBlues, Utilities.JType.JArray);
@@ -702,18 +822,14 @@ namespace QuickNoodle
                                 {
                                     Utilities.addOrUpdateElement(_event._customData, "_color", blues, Utilities.JType.JArray);
                                 }
-                            }
-                            lock (balanceLock)
-                            {
-                                lock (eventLock)
+                                lock (balanceLock)
                                 {
                                     mapCopy._events[i] = _event;
                                 }
-                            }
-                            break;
-                        case 5: case 6: case 7:
-                            lock (eventLock)
-                            {
+                                break;
+                            case 5:
+                            case 6:
+                            case 7:
                                 if (eventReds[0] >= 0)
                                 {
                                     Utilities.addOrUpdateElement(_event._customData, "_color", eventReds, Utilities.JType.JArray);
@@ -723,18 +839,16 @@ namespace QuickNoodle
                                 {
                                     Utilities.addOrUpdateElement(_event._customData, "_color", reds, Utilities.JType.JArray);
                                 }
-                            }
 
-                            
-                            lock (balanceLock)
-                            {
-                                lock(eventLock)
+
+
+                                lock (balanceLock)
                                 {
                                     mapCopy._events[i] = _event;
-                                }
                                 
-                            }
-                            break;
+                                }
+                                break;
+                        }
                     }
                     
                     
@@ -752,7 +866,14 @@ namespace QuickNoodle
                 float _time = _wall._time;
                 if (time <= _time)
                 {
+                    lock (wallLock)
+                    {
+                        if (noteJumpSpeed > 0) { _wall._customData._noteJumpMovementSpeed = noteJumpSpeed; } else { _wall._customData.Remove("_noteJumpMovementSpeed"); }
 
+                        if (noteSpawnOffset != -10.25) { _wall._customData._noteJumpStartBeatOffset = noteSpawnOffset; } else { _wall._customData.Remove("_noteJumpStartBeatOffset"); }
+
+                        if(wallColor[0] > 0) { Utilities.addOrUpdateElement(_wall._customData, "_color", wallColor, Utilities.JType.JArray);  }
+                    }
                 }
             }
 
@@ -760,9 +881,10 @@ namespace QuickNoodle
             {
                 mapObject = mapCopy;
             }
-            log.WriteLine($"Finished processing {bookmarkNumber}th bookmark in {length.Elapsed.Seconds} seconds");
+            log.WriteLine($"Finished processing the {bookmarkNumber}nd bookmark in {length.Elapsed.Seconds} seconds");
             
         }
+        /*
         private List<string> parseText(String s, float time)
         {
             
@@ -813,7 +935,7 @@ namespace QuickNoodle
 			                    "z": 0
 		                    }
 	                    }
-                    }*/
+                    }
 #endregion
                     switch (argument[0])
                     {
@@ -870,11 +992,11 @@ namespace QuickNoodle
                 flags[pos] = flags[i];
                 flags[pos] = flags[i - 1];
             }
-            flags.RemoveRange(pos, flags.Count - pos);*/
+            flags.RemoveRange(pos, flags.Count - pos);
             IEnumerable<string> query = flags.Where((x, i) => i % 2 == 1);
             flags = query.ToList();
             return flags;
-        }
+        }*/
         #region funnies
         private void label1_Click_1(object sender, EventArgs e)
         {
@@ -1018,6 +1140,12 @@ namespace QuickNoodle
                 button2.Text = "Close log";
             }
             
+        }
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            PresetCreator pc = new PresetCreator();
+            pc.Show();
         }
     }
 

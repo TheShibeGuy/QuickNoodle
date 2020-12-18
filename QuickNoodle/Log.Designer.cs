@@ -42,6 +42,7 @@
             this.logbox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.logbox.Size = new System.Drawing.Size(279, 950);
             this.logbox.TabIndex = 0;
+            this.logbox.TextChanged += new System.EventHandler(this.logbox_TextChanged);
             // 
             // Log
             // 
