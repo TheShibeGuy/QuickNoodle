@@ -52,7 +52,7 @@ namespace QuickNoodle
 
                     //Read the contents of the file into a stream
                     var fileStream = openFileDialog.OpenFile();
-                    
+
                     using (StreamReader reader = new StreamReader(fileStream))
                     {
                         fileContent = reader.ReadToEnd();
@@ -62,7 +62,7 @@ namespace QuickNoodle
 
                         // convert.Enabled = true;
                         import.Enabled = true;
- 
+
 
                         dynamic bookmarks = mapObject._customData._bookmarks;
                         if (bookmarks.Count > 0)
@@ -95,13 +95,13 @@ namespace QuickNoodle
             foreach (dynamic bookmark in bookmarks)
             {
                 int l = bookmarks.Count;
-                dynamic nextMark = bookmarks[index == l-1 ? index : index + 1];
+                dynamic nextMark = bookmarks[index == l - 1 ? index : index + 1];
                 index++;
                 log.WriteLine($"{Environment.NewLine}{index}st bookmark.");
                 welcome.Text = $"Processing {index}th bookmark.";
                 float time = float.Parse(bookmark._time.ToString());
                 string name = bookmark._name.ToString().ToLower();
-                string[] arguments = new string[] { "njs", "offset", "r", "b", "wallcolor", "worldrotation", "noterotation", "standard", "nr", "nb", "lr", "lb", "wc" };
+                string[] arguments = new string[] { "njs", "offset", "r", "b", "wallcolor", "worldrotation", "noterotation", "standard", "nr", "nb", "lr", "lb", "wc", "360" };
 
                 string[] commands = name.Split(' ');
                 List<string> parsedCommands = new List<string>();
@@ -119,6 +119,8 @@ namespace QuickNoodle
                 float[] eventReds = new float[3] { -1, -1, -1 };
                 float[] eventBlues = new float[3] { -1, -1, -1 };
 
+                int rotation = -1;
+
                 float[] worldRotation = new float[3] { 0.0f, 0.0f, 0.0f };
                 float[] noteRotation = new float[3] { 0.0f, 0.0f, 0.0f };
                 float noteSpawnOffset = -10.25f;
@@ -134,7 +136,7 @@ namespace QuickNoodle
                     // {"r", "0.0, 0.0, 0.0"}
                     bool contains = arguments.Contains(fullCommand[0]);
 
-                    if(contains)
+                    if (contains)
                     {
                         // Console.WriteLine(command);
                         string[] commandAndArgs = command.Split('=');
@@ -147,9 +149,9 @@ namespace QuickNoodle
                             argHex = Utilities.DecodeHexColor(args);
                         } else
                         {
-                            argHex = new int[] { -1 , -1, -1 };
+                            argHex = new int[] { -1, -1, -1 };
                         }
-                        
+
                         switch (commandAndArgs[0])
                         {
                             #region NoteColors
@@ -157,12 +159,12 @@ namespace QuickNoodle
                                 string[] noteRed = args.Split(',');
                                 if (noteRed.Length != 3)
                                 {
-                                    
-                                    
-                                    
-                                    if(argHex[0] != -1)
+
+
+
+                                    if (argHex[0] != -1)
                                     {
-                                        noteReds = argHex.Select(x => ((float) x) / 255).ToArray();
+                                        noteReds = argHex.Select(x => ((float)x) / 255).ToArray();
                                         break;
                                     }
                                     log.WriteLine("Note Red color only has one value, skipping");
@@ -320,7 +322,7 @@ namespace QuickNoodle
                                 for (int i = 0; i < 3; i++)
                                 {
                                     string flot = red[i];
-                                    
+
                                     if (float.TryParse(flot, out float fa))
                                     {
                                         reds[i] = fa / 255;
@@ -333,7 +335,7 @@ namespace QuickNoodle
 
                                         break;
                                     }
-                                    if(i == 2)
+                                    if (i == 2)
                                     {
                                         log.WriteLine($"Red Colors: {reds[0]}, {reds[1]}, {reds[2]}");
                                     }
@@ -406,7 +408,7 @@ namespace QuickNoodle
                                     }
                                 }
                                 break;
-                                
+
                             case "noterotation":
                                 string[] nR = args.Split(',');
 
@@ -439,6 +441,19 @@ namespace QuickNoodle
                                 break;
                             #endregion
                             #region Misc
+                            case "360":
+                                int tf;
+                                if (int.TryParse(args, out tf))
+                                {
+                                    rotation = tf;
+                                    log.WriteLine($"360 Event: {tf}");
+                                }
+                                else
+                                {
+                                    log.WriteLine($"Error whilst decoding 360 event on bookmark at {time}, skipping.");
+                                    break;
+                                }
+                                break;
                             case "standard":
                                 isNull = true;
                                 log.WriteLine($"isNull: true ");
@@ -455,7 +470,7 @@ namespace QuickNoodle
                                     log.WriteLine($"Error whilst decoding NJS on bookmark at {time}, skipping.");
                                     break;
                                 }
-                                    break;
+                                break;
                             case "offset":
                                 float flo;
                                 if (float.TryParse(args, out flo))
@@ -505,9 +520,9 @@ namespace QuickNoodle
 
                         }
 
-                        
 
-                        
+
+
                         // ForEach(Console.WriteLine);
                         //Console.WriteLine($"Right colors: R: {blues[0].ToString()} G: {blues[1].ToString()} B: {blues[2].ToString()} ::: Left colors: R: {reds[0].ToString()} G: {reds[1].ToString()} B: {reds[2].ToString()}");
                         //Console.WriteLine($"");
@@ -517,7 +532,7 @@ namespace QuickNoodle
                         log.WriteLine($"Unrecognized command: {command}, skipping bookmark.");
                         isNull = true;
                     }
-                    
+
                 }
                 //if (reds[0] == -1.0f && blues[0] == -1.0f && worldRotation == new float[3] { 0.0f, 0.0f, 0.0f } && noteRotation == new float[3] { 0.0f, 0.0f, 0.0f } && noteSpawnOffset == -10.25f && noteJumpSpeed == -1)
                 //    isNull = true;
@@ -531,27 +546,28 @@ namespace QuickNoodle
                 {
                     Thread thread = new Thread(() => newProcessing(
                         reds,
-                        blues, 
-                        noteReds, 
-                        noteBlues, 
-                        eventReds, 
-                        eventBlues, 
-                        wallColor, 
-                        worldRotation, 
-                        noteRotation, 
-                        noteSpawnOffset, 
-                        noteJumpSpeed, 
-                        isNull, 
-                        time, 
-                        mapCopy, 
-                        nextMark, 
+                        blues,
+                        noteReds,
+                        noteBlues,
+                        eventReds,
+                        eventBlues,
+                        wallColor,
+                        worldRotation,
+                        noteRotation,
+                        rotation,
+                        noteSpawnOffset,
+                        noteJumpSpeed,
+                        isNull,
+                        time,
+                        mapCopy,
+                        nextMark,
                         index));
                     thread.IsBackground = true;
                     thread.Start();
                 }
                 else
                 {
-                    newProcessing(reds, blues, noteReds, noteBlues, eventReds, eventBlues, wallColor, worldRotation, noteRotation, noteSpawnOffset, noteJumpSpeed, isNull, time, mapCopy, nextMark, index);
+                    newProcessing(reds, blues, noteReds, noteBlues, eventReds, eventBlues, wallColor, worldRotation, noteRotation, rotation, noteSpawnOffset, noteJumpSpeed, isNull, time, mapCopy, nextMark, index);
                 }
 
 
@@ -602,21 +618,22 @@ namespace QuickNoodle
         }
 
         // Ignore my spaghetti please 
-        public void newProcessing(float[] reds, 
-            float[] blues, 
-            float[] noteReds, 
-            float[] noteBlues, 
-            float[] eventReds, 
-            float[] eventBlues, 
+        public void newProcessing(float[] reds,
+            float[] blues,
+            float[] noteReds,
+            float[] noteBlues,
+            float[] eventReds,
+            float[] eventBlues,
             float[] wallColor,
             float[] worldRotation,
-            float[] noteRotation, 
-            float noteSpawnOffset, 
-            float noteJumpSpeed, 
-            bool isNull, 
-            float time, 
-            dynamic mapCopy, 
-            dynamic next, 
+            float[] noteRotation,
+            int rotation,
+            float noteSpawnOffset,
+            float noteJumpSpeed,
+            bool isNull,
+            float time,
+            dynamic mapCopy,
+            dynamic next,
             int bookmarkNumber
             )
         {
@@ -628,6 +645,34 @@ namespace QuickNoodle
             // I probably shouldn't loop through every single note, lighting event and wall for each bookmark but honestly who cares
             Stopwatch length = Stopwatch.StartNew();
 
+            if (rotation != -1)
+            {
+                int a = rotation;
+                int i = 0;
+                RotationValue[] list = new RotationValue[8]
+                {
+                    new RotationValue ( 0, -60 ),
+                    new RotationValue ( 1, -45 ),
+                    new RotationValue ( 2, -30 ),
+                    new RotationValue ( 3, -15 ),
+                    new RotationValue ( 4, 15 ),
+                    new RotationValue ( 5, 30 ),
+                    new RotationValue ( 6, 45 ),
+                    new RotationValue ( 7, 60 )
+                };
+                for (i = 0; i < 6 && a >= list[i].Rotation; i++) ;
+
+
+                mapCopy._events.Add(new JObject()
+                {
+                    new JProperty("_time", time),
+                    new JProperty("_type", 15),
+                    new JProperty("_value", i)
+
+                });
+            }
+            
+            
             for ( int i = 0; i < mapCopy._notes.Count; i++)
             {
                     dynamic _note = mapCopy._notes[i];
