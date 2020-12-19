@@ -20,6 +20,7 @@ Please forgive my terrible syntaxes
 #### Offset: spawn offset for notes, bombs, and walls. (Ex: offset=0.1) (float)<br>
 #### WorldRotation: rotation and movement direction of notes, walls and bombs (like how 360 maps look). (Ex: WorldRotation=0,90,0) (float of any x,y,z coordinates between 0-360)>
 #### NoteRotation: rotatates the look direction of a note (like making the note look towards the left) (Ex: NoteRotation=0,0,10) (float of any x,y,z coordinates between 0-360) 
+#### 360: Adds a 360 rotation event  (Ex: 360=-30) (Note that because Beat Games is dumb the only supported rotations are: -60, -45, -30, -15, 15, 30, 45, 60)
 #### standard: skips placing any custom data for that bookmark until the next one (bool: default is false) (Ex: normal=true)<br>
 
 ## Examples
@@ -40,7 +41,7 @@ idk what to put here but if youre having issues dm me on discord shobie#1577
 # Soon™
 - [x] 1-255 RGB Color support
 - [ ] Move Away from bookmarks to QUN files
-- [ ] Support for hex colors
+- [x] Support for hex colors
 - [x] Add wall njs, offset (this is really easy just not a priority)
-- [ ] Add wall colors. (also super easy)
+- x] Add wall colors. (also super easy)
 - [ ] Animation (big task)
