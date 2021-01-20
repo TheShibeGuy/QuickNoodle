@@ -13,7 +13,7 @@ Argument Editor does nothing and is a stand in currently.<br>
 Preset does nothing and is a stand in too.<br>
 #### Click [here](https://github.com/ShibeGuy/QuickNoodle/blob/master/AnimationDocs.md) for animation docs.
 ### Chroma
-**All Color values can be RGB (ex: B=0,128,255) OR HexRGB (ex: B=#0080ff). Data Type: Float, with a range of 0-255 OR #00000-#ffffff**<br>
+**All Color values can be RGB (ex: B=0,128,255) OR HexRGB (ex: B=#0080ff)<br>
 **B:** Syntax of Blue Notes and Lighting Events (ex: B=20,75,200)<br>
 **R:** Syntax of Red Notes and Lighting Events (ex: B=200,75,20)<br>
 
