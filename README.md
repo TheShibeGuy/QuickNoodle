@@ -15,13 +15,14 @@ Preset does nothing and is a stand in too.<br>
 ## Syntax
 ### Chroma
 **All Color values can be RGB (ex: B=0,128,255) OR HexRGB (ex: B=#0080ff)<br>
+*Please note that the '#' is required, I am incredibly lazy*<br><br>
 **B:** Syntax of Blue Notes and Lighting Events (ex: B=20,75,200)<br>
 **R:** Syntax of Red Notes and Lighting Events (ex: B=200,75,20)<br>
 
 **All syntax below is specific to what is specified. It will not chromatize anything outside of what is specified**<br>
 **NB and NR** are the syntax specific to Blue Notes and Red Notes respectively (ex: NB=20,75,200)<br>
 **LB and LR** are the syntax specific to Blue Lights and Red Lights respectively (ex: LR=20,75,200)<br>
-**WC** is the syntax specific to Walls (ex: WC=8f008f)<br>
+**WC** is the syntax specific to Walls (ex: WC=#8f008f)<br>
 **NB, NR, LB, and LR will override B and R.**<br>
 
 ### Custom Spins
