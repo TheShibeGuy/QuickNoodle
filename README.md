@@ -1,7 +1,7 @@
 # QuickNoodle
 Quickly apply basic Noodle Extensions and Chroma to large sections of a map.
 ## Note
-This does not add "Noodle Extensions" to requirements or "Chroma" to recommendations/requirements to your map's info file, while those are required for it to work; you have to do that yourself.<br>
+This does not add **"Noodle Extensions"** to requirements or **"Chroma"** to recommendations/requirements to your map's info file, while those are required for it to work; you have to do that yourself.<br>
 You must make sure that the syntax is correct for the entire bookmark or else it will be skipped. look in **Show Log** if you suspect your bookmark is being skipped.<br>
 
 **Data in is broken up with spaces. ex: R=150,40,200 nB=20,75,200 NoteRotation=0,0,10 WorldRotation=0,90,0 njs=25 offset=0.1**<br>
