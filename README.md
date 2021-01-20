@@ -7,11 +7,12 @@ You must make sure that the syntax is correct for the entire bookmark or else it
 **Data in is broken up with spaces. ex: R=150,40,200 nB=20,75,200 NoteRotation=0,0,10 WorldRotation=0,90,0 njs=25 offset=0.1**<br>
 **Syntax is capitalisation friendly.**<br>
 Please forgive my terrible syntaxes<br>
-# Known Bugs
+## Known Bugs
 Currently in alpha. Some things will just not work.<br>
 Argument Editor does nothing and is a stand in currently.<br>
 Preset does nothing and is a stand in too.<br>
 #### Click [here](https://github.com/ShibeGuy/QuickNoodle/blob/master/AnimationDocs.md) for animation docs.
+## Syntax
 ### Chroma
 **All Color values can be RGB (ex: B=0,128,255) OR HexRGB (ex: B=#0080ff)<br>
 **B:** Syntax of Blue Notes and Lighting Events (ex: B=20,75,200)<br>
@@ -38,7 +39,7 @@ Preset does nothing and is a stand in too.<br>
 **NoteRotation:** rotates the look direction of a note (like making the note look towards the left) (Ex: NoteRotation=0,0,10) (float of any x,y,z coordinates between 0-360) (float)<br>
 **360:** Adds a 360 rotation event  (Ex: 360=-30) (Note that because Beat Games is dumb the only supported rotations are: -60, -45, -30, -15, 15, 30, 45, 60) (int)<br>
 
-# Usage
+## Usage
 **Open QN and select your map file of choice.**<br>
 **Has to have bookmarks of some sort or else it will be angry**<br>
 **~~import .QUN/YAML file~~ (soon™)**<br>
@@ -46,9 +47,9 @@ Preset does nothing and is a stand in too.<br>
 **Wait.**<br>
 **Save your file**<br>
 
-# Help
+## Help
 idk what to put here but if you're having issues dm me on discord shobie#1577
-# Soon™
+## Soon™
 - [x] 1-255 RGB Color support
 - [x] Support for hex colors
 - [x] Add wall colors. (also super easy)
