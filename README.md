@@ -14,8 +14,8 @@ Preset does nothing and is a stand in too.<br>
 #### Click [here](https://github.com/ShibeGuy/QuickNoodle/blob/master/AnimationDocs.md) for animation docs.
 ## Syntax
 ### Chroma
-**All Color values can be RGB (ex: B=0,128,255) OR HexRGB (ex: B=#0080ff)<br>
-*Please note that the '#' is required, I am incredibly lazy*<br><br>
+**All Color values can be RGB (ex: B=0,128,255) OR HexRGB (ex: B=#0080ff)**<br>
+*Please note that the '#' is required for HexRGB colors, I am incredibly lazy*<br><br>
 **B:** Syntax of Blue Notes and Lighting Events (ex: B=20,75,200)<br>
 **R:** Syntax of Red Notes and Lighting Events (ex: B=200,75,20)<br>
 
