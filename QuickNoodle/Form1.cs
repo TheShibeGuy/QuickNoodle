@@ -1,17 +1,22 @@
-﻿using Microsoft.CSharp.RuntimeBinder;
+﻿// YO
+// You're looking at my source code, that is a MISTAKE
+
+// I am a beginner to C# and this code is ATROCIOUS
+
+// I plan on cleaning it up soon, but I need to actually get better at this language first.
+
+// Please don't look too hard, you may never recover.
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using YamlDotNet.Serialization;
 
@@ -32,7 +37,7 @@ namespace QuickNoodle
         private static readonly object eventLock = new object();
         private static readonly object noteLock = new object();
         private static readonly object wallLock = new object();
-
+        // Open
         private void Button1_Click(object sender, EventArgs e)
         {
             var fileContent = string.Empty;
@@ -56,8 +61,8 @@ namespace QuickNoodle
                     using (StreamReader reader = new StreamReader(fileStream))
                     {
                         fileContent = reader.ReadToEnd();
-                        this.Text = "QuickNoodle - Open File // " + openFileDialog.FileName;
-                        this.welcome.Text = "Opened file";
+                        Text = "QuickNoodle - Open File // " + openFileDialog.FileName;
+                        welcome.Text = "Opened file";
                         mapObject = JsonConvert.DeserializeObject(fileContent);
 
                         // convert.Enabled = true;
@@ -70,7 +75,7 @@ namespace QuickNoodle
                             //List<string> flags = parseBookmarks(bookmarks, mapObject);
                             welcome.Text = "Ready.";
                             convert.Enabled = true;
-
+                            scrub.Enabled = true;
                             // fancyProcessingTime(mapObject, flags);
                         }
                         else
@@ -86,11 +91,38 @@ namespace QuickNoodle
 
 
         }
-        private List<string> parseBookmarks(dynamic bookmarks, dynamic map)
+
+        private void updateElapsed(Stopwatch time)
+        {
+            while (true)
+            {
+                string elapsedS;
+                if (time.Elapsed.TotalMinutes % 1 == 0)
+                {
+                    elapsedS = time.Elapsed.ToString(@"mm\m ss\.ff\s") + " elapsed";
+                    
+                } else
+                {
+                    elapsedS = time.Elapsed.ToString(@"ss\.ff") + " seconds elapsed.";
+                }
+                elapsed.Invoke(new Action(() => elapsed.Text = elapsedS));
+                // Thread.Sleep(100);
+            }
+
+        }
+        private void parseBookmarks(dynamic bookmarks, dynamic map)
         {
             List<string> marks = new List<string>();
             int index = 0;
             Stopwatch length = Stopwatch.StartNew();
+            Thread stopwatchThread = new Thread(() => updateElapsed(length));
+            stopwatchThread.IsBackground = true;
+            stopwatchThread.Start();
+            elapsed.Invoke(new Action(() => elapsed.Visible = true));
+            if (scrub.Checked)
+            {
+                scrubMapData(map);
+            }
             addCustomDataToMap(map);
             foreach (dynamic bookmark in bookmarks)
             {
@@ -98,11 +130,14 @@ namespace QuickNoodle
                 dynamic nextMark = bookmarks[index == l - 1 ? index : index + 1];
                 index++;
                 log.WriteLine($"{Environment.NewLine}{index}st bookmark.");
-                welcome.Text = $"Processing {index}th bookmark.";
+                welcome.Invoke(new Action(() => welcome.Text = $"Processing {index}th bookmark."));
+                
                 float time = float.Parse(bookmark._time.ToString());
                 string name = bookmark._name.ToString().ToLower();
-                string[] arguments = new string[] { "njs", "offset", "r", "b", "wallcolor", "worldrotation", "noterotation", "standard", "nr", "nb", "lr", "lb", "wc", "360" };
-
+                /**/
+                string[] arguments = new string[] { "njs", "offset", "r", "b", "wallcolor", "worldrotation", "noterotation", "standard", "nr", "nb", "lr", "lb", "wc", "360", "ringname" /* small OR big*/, "propegation", "prop", "delay", "speed", "direction" /* rand OR alternating OR ccw OR cw */, "rotation", "length" };
+                log.WriteLine(name);
+                
                 string[] commands = name.Split(' ');
                 List<string> parsedCommands = new List<string>();
                 // {"r=0.0,0.0,0.0", "b=1.0,1.0,1.0", "offset=-0.1"}
@@ -119,6 +154,12 @@ namespace QuickNoodle
                 float[] eventReds = new float[3] { -1, -1, -1 };
                 float[] eventBlues = new float[3] { -1, -1, -1 };
 
+                int ringSpinDirection = -1;
+                float ringPropegation = -1;
+                string ringName = string.Empty;
+                float ringSpeed = -1;
+                float ringRotation = -1;
+
                 int rotation = -1;
 
                 float[] worldRotation = new float[3] { 0.0f, 0.0f, 0.0f };
@@ -127,11 +168,11 @@ namespace QuickNoodle
                 float noteJumpSpeed = -1;
                 bool isNull = false;
                 #endregion
-
+                bool unrecognized = false;
                 foreach (string command in commands)
                 {
-                    // "r=0.0, 0.0, 0.0"
-                    welcome.Text = $"Processing {index}th bookmark";
+                    // "r=0.0,0.0,0.0"
+                   // welcome.Text = $"Processing {index}th bookmark";
                     string[] fullCommand = command.Split('=');
                     // {"r", "0.0, 0.0, 0.0"}
                     bool contains = arguments.Contains(fullCommand[0]);
@@ -140,13 +181,16 @@ namespace QuickNoodle
                     {
                         // Console.WriteLine(command);
                         string[] commandAndArgs = command.Split('=');
+                        if (!(commandAndArgs.Length > 1))
+                        { continue; }
                         string args = commandAndArgs[1];
                         JArray array = new JArray();
-                        Console.WriteLine(args);
+                        //log.WriteLine(args);
                         int[] argHex;
                         if (args.StartsWith("#"))
                         {
                             argHex = Utilities.DecodeHexColor(args);
+                            log.WriteLine($"Hex colors::  R: {argHex[0]} G: {argHex[1]} B: {argHex[2]}");
                         } else
                         {
                             argHex = new int[] { -1, -1, -1 };
@@ -154,7 +198,8 @@ namespace QuickNoodle
 
                         switch (commandAndArgs[0])
                         {
-                            #region NoteColors
+                            // THIS IS a very very VERY common area for bugs if there is something check here first
+                            #region Colors
                             case "nr":
                                 string[] noteRed = args.Split(',');
                                 if (noteRed.Length != 3)
@@ -162,9 +207,10 @@ namespace QuickNoodle
 
 
 
-                                    if (argHex[0] != -1)
+                                    if (argHex[0] >= 0)
                                     {
                                         noteReds = argHex.Select(x => ((float)x) / 255).ToArray();
+                                        log.WriteLine($"Red Colors: {noteRed[0]}, {noteRed[1]}, {noteRed[2]}");
                                         break;
                                     }
                                     log.WriteLine("Note Red color only has one value, skipping");
@@ -201,7 +247,8 @@ namespace QuickNoodle
                                 {
                                     if (argHex[0] != -1)
                                     {
-                                        noteReds = argHex.Select(x => ((float)x) / 255).ToArray();
+                                        noteBlues = argHex.Select(x => ((float)x) / 255).ToArray();
+                                        log.WriteLine($"Blue note Colors: {noteBlues[0]}, {noteBlues[1]}, {noteBlues[2]}");
                                         break;
                                     }
                                     log.WriteLine("Note blue color only has one value, skipping");
@@ -227,7 +274,7 @@ namespace QuickNoodle
                                     }
                                     if (i == 2)
                                     {
-                                        log.WriteLine($"Red Colors: {noteBlues[0]}, {noteBlues[1]}, {noteBlues[2]}");
+                                        log.WriteLine($"Blue Note Colors: {noteBlues[0]}, {noteBlues[1]}, {noteBlues[2]}");
                                     }
                                 }
                                 break;
@@ -237,7 +284,8 @@ namespace QuickNoodle
                                 {
                                     if (argHex[0] != -1)
                                     {
-                                        noteReds = argHex.Select(x => ((float)x) / 255).ToArray();
+                                        eventReds = argHex.Select(x => ((float)x) / 255).ToArray();
+                                        log.WriteLine($"Event Red Colors: {eventReds[0]}, {eventReds[1]}, {eventReds[2]}");
                                         break;
                                     }
                                     log.WriteLine("Event Red color only has one value, skipping");
@@ -263,7 +311,7 @@ namespace QuickNoodle
                                     }
                                     if (i == 2)
                                     {
-                                        log.WriteLine($"Red Colors: {eventReds[0]}, {eventReds[1]}, {eventReds[2]}");
+                                        log.WriteLine($"Event Red Colors: {eventReds[0]}, {eventReds[1]}, {eventReds[2]}");
                                     }
                                 }
                                 break;
@@ -273,7 +321,8 @@ namespace QuickNoodle
                                 {
                                     if (argHex[0] != -1)
                                     {
-                                        noteReds = argHex.Select(x => ((float)x) / 255).ToArray();
+                                        eventBlues = argHex.Select(x => ((float)x) / 255).ToArray();
+                                        log.WriteLine($"Event Blue Colors: {eventBlues[0]}, {eventBlues[1]}, {eventBlues[2]}");
                                         break;
                                     }
                                     log.WriteLine("Event Blue color only has one value, skipping");
@@ -310,10 +359,11 @@ namespace QuickNoodle
                                 {
                                     if (argHex[0] != -1)
                                     {
-                                        noteReds = argHex.Select(x => ((float)x) / 255).ToArray();
+                                        reds = argHex.Select(x => ((float)x) / 255).ToArray();
+                                        log.WriteLine($"Global Red Colors: {reds[0]}, {reds[1]}, {reds[2]}");
                                         break;
                                     }
-                                    log.WriteLine("Red color only has one value, skipping");
+                                    log.WriteLine("Global Red color only has one value, skipping");
                                     reds = new float[3] { -1, -1, -1 };
                                     break;
                                 }
@@ -348,7 +398,8 @@ namespace QuickNoodle
                                 {
                                     if (argHex[0] != -1)
                                     {
-                                        noteReds = argHex.Select(x => ((float)x) / 255).ToArray();
+                                        blues = argHex.Select(x => ((float)x) / 255).ToArray();
+                                        log.WriteLine($"Global Blue Colors: {blues[0]}, {blues[1]}, {blues[2]}");
                                         break;
                                     }
                                     log.WriteLine("Blue color only has one value, skipping");
@@ -372,9 +423,45 @@ namespace QuickNoodle
                                     }
                                     if (i == 2)
                                     {
-                                        log.WriteLine($"Blue Colors: {blues[0]}, {blues[1]}, {blues[2]}");
+                                        log.WriteLine($"Global Blue Colors: {blues[0]}, {blues[1]}, {blues[2]}");
                                     }
                                 }
+                                break;
+                            case "wc":
+                            case "wallcolor":
+                                string[] wallColors = args.Split(',');
+                                if (wallColors.Length != 3)
+                                {
+                                    if (argHex[0] != -1)
+                                    {
+                                        wallColor = argHex.Select(x => ((float)x) / 255).ToArray();
+                                        log.WriteLine($"Wall Colors: {blues[0]}, {blues[1]}, {blues[2]}");
+                                        break;
+                                    }
+                                    log.WriteLine("wallcolor color only has one value, skipping");
+                                    wallColor = new float[3] { -1, -1, -1 };
+                                    break;
+                                }
+
+                                for (int i = 0; i < 3; i++)
+                                {
+                                    string flot = wallColors[i];
+
+                                    if (float.TryParse(flot, out float fa))
+                                    {
+                                        wallColor[i] = fa / 255;
+
+                                    }
+                                    else
+                                    {
+                                        log.WriteLine($"Error whilst decoding wall colors on bookmark at {time}, skipping");
+                                        wallColor = new float[3] { -1, -1, -1 };
+
+                                        break;
+                                    }
+
+                                }
+                                log.WriteLine($"Wall Colors: {wallColor[0]}, {wallColor[1]}, {wallColor[2]}");
                                 break;
                             #endregion
                             #region Rotations
@@ -484,35 +571,80 @@ namespace QuickNoodle
                                     break;
                                 }
                                 break;
-                            case "wc":
-                            case "wallcolor":
-                                string[] wallColors = args.Split(',');
-                                if (wallColors.Length != 3)
+                            #endregion
+                            #region EventGarbage
+                            case "ringname":
+                                switch (args.ToLower())
                                 {
-                                    log.WriteLine("wallcolor color only has one value, skipping");
-                                    wallColor = new float[3] { -1, -1, -1 };
+                                    case "bigrings":
+                                    case "big":
+                                        ringName = "BigTrackLaneRings";
+                                        break;
+                                    case "smallrings":
+                                    case "small":
+                                        ringName = "SmallTrackLaneRings";
+                                        break;
+                                }
+                                break;
+                            case "propegation":
+                            case "prop":
+                            case "delay": // prop | delay | propegation 2.4
+                                
+                                if (float.TryParse(args, out f))
+                                {
+                                    ringPropegation = f;
+                                    log.WriteLine($"RingPropegation: {f}");
+                                }
+                                else
+                                {
+                                    log.WriteLine($"Error whilst decoding Propegation on bookmark at {time}, skipping.");
                                     break;
                                 }
-
-                                for (int i = 0; i < 3; i++)
+                                break;
+                            case "speed": // speed=2.5
+                                if (float.TryParse(args, out f))
                                 {
-                                    string flot = wallColors[i];
-
-                                    if (float.TryParse(flot, out float fa))
-                                    {
-                                        wallColor[i] = fa / 255;
-
-                                    }
-                                    else
-                                    {
-                                        log.WriteLine($"Error whilst decoding wall colors on bookmark at {time}, skipping");
-                                        wallColor = new float[3] { -1, -1, -1 };
-
-                                        break;
-                                    }
-
+                                    ringSpeed = f;
+                                    log.WriteLine($"RingSpeed: {f}");
                                 }
-                                log.WriteLine($"Wall Colors: {wallColor[0]}, {wallColor[1]}, {wallColor[2]}");
+                                else
+                                {
+                                    log.WriteLine($"Error whilst decoding Propegation on bookmark at {time}, skipping.");
+                                    break;
+                                }
+                                break;
+                            case "direction": // direction=alternating
+                                switch (args.ToLower())
+                                {
+                                    case "rand":
+                                    case "random":
+                                        Random r = new Random();
+                                        int rand = r.Next();
+                                        ringSpinDirection = rand % 2 == 0 ? 1 : 0;
+                                        break;
+                                    case "alternating":
+                                        ringSpinDirection = 2;
+                                        break;
+                                    case "cw":
+                                        ringSpinDirection = 1;
+                                        break;
+                                    case "ccw":
+                                        ringSpinDirection = 0;
+                                        break;
+                                }
+                                break;
+                            case "rotation":
+                            case "length": // Rotation | Length 20.5
+                                if (float.TryParse(args, out f))
+                                {
+                                    ringRotation = f;
+                                    log.WriteLine($"Ring Rotation: {f}");
+                                }
+                                else
+                                {
+                                    log.WriteLine($"Error whilst decoding Ring Rotation on bookmark at {time}, skipping.");
+                                    break;
+                                }
                                 break;
                             #endregion
                             default:
@@ -530,10 +662,17 @@ namespace QuickNoodle
                     else
                     {
                         log.WriteLine($"Unrecognized command: {command}, skipping bookmark.");
+                        unrecognized = true;
                         isNull = true;
+                        continue;
                     }
 
                 }
+                if (unrecognized)
+                {
+                    continue;
+                }
+
                 //if (reds[0] == -1.0f && blues[0] == -1.0f && worldRotation == new float[3] { 0.0f, 0.0f, 0.0f } && noteRotation == new float[3] { 0.0f, 0.0f, 0.0f } && noteSpawnOffset == -10.25f && noteJumpSpeed == -1)
                 //    isNull = true;
                 var mapCopy = map;
@@ -551,6 +690,13 @@ namespace QuickNoodle
                         noteBlues,
                         eventReds,
                         eventBlues,
+
+                        ringName,
+                        ringRotation,
+                        ringPropegation,
+                        ringSpeed,
+                        ringSpinDirection, 
+
                         wallColor,
                         worldRotation,
                         noteRotation,
@@ -561,13 +707,39 @@ namespace QuickNoodle
                         time,
                         mapCopy,
                         nextMark,
-                        index));
+                        index
+                        ));
                     thread.IsBackground = true;
                     thread.Start();
                 }
                 else
                 {
-                    newProcessing(reds, blues, noteReds, noteBlues, eventReds, eventBlues, wallColor, worldRotation, noteRotation, rotation, noteSpawnOffset, noteJumpSpeed, isNull, time, mapCopy, nextMark, index);
+                    newProcessing(
+                        reds,
+                        blues,
+                        noteReds,
+                        noteBlues,
+                        eventReds,
+                        eventBlues,
+
+                        ringName,
+                        ringRotation,
+                        ringPropegation,
+                        ringSpeed,
+                        ringSpinDirection,
+
+                        wallColor,
+                        worldRotation,
+                        noteRotation,
+                        rotation,
+                        noteSpawnOffset,
+                        noteJumpSpeed,
+                        isNull,
+                        time,
+                        mapCopy,
+                        nextMark,
+                        index
+                        );
                 }
 
 
@@ -577,12 +749,14 @@ namespace QuickNoodle
 
                 });*/
             }
+            elapsed.Invoke(new Action(() => elapsed.Visible = false));
+            welcome.Invoke(new Action(() => welcome.Text = $"Processed {map._events.Count} lighting events, and {map._notes.Count} notes in {length.Elapsed.ToString(@"mm\:ss\.ff")} seconds."));
+            
+            log.WriteLine($"Processed {map._events.Count} lighting events, and {map._notes.Count} notes in {length.Elapsed.TotalSeconds} seconds.");
+            save.Invoke(new Action(() => save.Enabled = true));
+            
 
-            welcome.Text = $"Processed {map._events.Count} lighting events, and {map._notes.Count} notes in {length.Elapsed.Seconds} seconds.";
-            log.WriteLine($"Processed {map._events.Count} lighting events, and {map._notes.Count} notes in {length.Elapsed.Seconds} seconds.");
-            save.Enabled = true;
-
-            return marks;
+            
         }
 
         private void addCustomDataToMap(dynamic map)
@@ -616,17 +790,56 @@ namespace QuickNoodle
                 map._obstacles[i] = note;
             }
         }
-
+        private void scrubMapData(dynamic map)
+        {
+            for (int i = 0; i < map._notes.Count; i++)
+            {
+                var note = map._notes[i];
+                if (note.ContainsKey("_customData"))
+                {
+                    note.Remove("_customData");
+                }
+                map._notes[i] = note;
+            }
+            for (int i = 0; i < map._events.Count; i++)
+            {
+                var note = map._events[i];
+                if (note.ContainsKey("_customData"))
+                {
+                    note.Remove("_customData");
+                }
+                map._events[i] = note;
+            }
+            for (int i = 0; i < map._obstacles.Count; i++)
+            {
+                var note = map._obstacles[i];
+                if (note.ContainsKey("_customData"))
+                {
+                    note.Remove("_customData");
+                }
+                map._obstacles[i] = note;
+            }
+        }
         // Ignore my spaghetti please 
         public void newProcessing(float[] reds,
             float[] blues,
             float[] noteReds,
             float[] noteBlues,
+
             float[] eventReds,
             float[] eventBlues,
-            float[] wallColor,
+
+            string ringNameFilter,
+            float  ringRotation,
+            float  ringProp,  
+            float  speed,          // well no shit this controls the speed
+            int    direction,     // 0 ccw, 1 cw, 2 opposite of previous, random if first
+
+            // These three are so obvious if you dont get it you're stupid
+            float[] /* Float for each color */ wallColor,
             float[] worldRotation,
             float[] noteRotation,
+
             int rotation,
             float noteSpawnOffset,
             float noteJumpSpeed,
@@ -639,6 +852,9 @@ namespace QuickNoodle
         {
 
             // Start processing data
+
+            // TODO - Make this erase all custom data after.
+
             if (isNull)
                 return;
             // Do the Notes
@@ -799,7 +1015,7 @@ namespace QuickNoodle
                         }
                     }
 
-
+                    
 
 
                     lock (noteLock)
@@ -830,13 +1046,15 @@ namespace QuickNoodle
             for ( int i = 0; i < mapCopy._events.Count; i++)
             {
                 dynamic _event;
+                dynamic prevEvent;
                 lock (eventLock)
                 {
                     _event = mapCopy._events[i];
+                    prevEvent = mapCopy._events[i > 0 ? i - 1 : i];
                 }
                 
                 float _time = _event._time;
-                if (time <= _time /* if time of bookmark is less than time of note && _time < _nextTime*/)
+                if (time <= _time /* if time of bookmark is less than time of note and _time < _nextTime*/)
                 {
 
                     if (isNull)
@@ -852,6 +1070,67 @@ namespace QuickNoodle
                     // i fixed a little
                     lock (eventLock)
                     {
+                        switch (int.Parse(_event._type.ToString()))
+                        {
+                            case 8: // Ring rotation
+                                /*
+                                ringNameFilter, string.empty
+                                ringRotation, -1
+                                ringProp,  -1
+                                speed,       -1  
+                                direction,     -1 */
+                                if (!ringNameFilter.Equals(string.Empty))
+                                {
+                                    Utilities.addOrUpdateElement(_event._customData, "_nameFilter", ringNameFilter, Utilities.JType.JValue);
+                                }
+                                if(ringRotation != -1)
+                                {
+                                    Utilities.addOrUpdateElement(_event._customData, "_rotation", ringRotation, Utilities.JType.JValue);
+                                }
+                                if (ringProp != -1)
+                                {
+                                    Utilities.addOrUpdateElement(_event._customData, "_prop", ringProp, Utilities.JType.JValue);
+                                }
+                                if (speed != -1)
+                                {
+                                    Utilities.addOrUpdateElement(_event._customData, "_speed", speed, Utilities.JType.JValue);
+                                }
+                                switch (direction)
+                                {
+                                    case 0:
+                                    case 1:
+                                        Utilities.addOrUpdateElement(_event._customData, "_direction", direction, Utilities.JType.JValue);
+                                        break;
+                                    case 2:
+                                        float f;
+                                        if(float.TryParse(alternatingFraction.Text, out f))
+                                        {
+                                            if (_event._time - prevEvent._time < f)
+                                            {
+                                                if (Utilities.elementDoesHaveKey(prevEvent._customData, "_direction"))
+                                                {
+                                                    Utilities.addOrUpdateElement(_event._customData, "_direction", prevEvent._customData._direction, Utilities.JType.JValue);
+                                                }
+                                                else
+                                                {
+                                                    Random r = new Random();
+                                                    
+                                                    Utilities.addOrUpdateElement(_event._customData, "_direction", r.Next() % 2 == 0 ? 1 : 0, Utilities.JType.JValue);
+                                                }
+
+                                                
+                                            }
+                                        }
+                                        else
+                                        {
+                                            log.WriteLine("How the fuck did you mess up making the alternating time maximum a float");
+                                        }
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                break;
+                        }
                         switch (int.Parse(_event._value.ToString()))
                         {
                             // cases 1 2 3 are blue events
@@ -1045,7 +1324,7 @@ namespace QuickNoodle
         #region funnies
         private void label1_Click_1(object sender, EventArgs e)
         {
-            MessageBox.Show("Stop clicking my text!!!!", "Baby man ", MessageBoxButtons.YesNo);
+            System.Windows.Forms.MessageBox.Show("Stop clicking my text!!!!", "Baby man ", MessageBoxButtons.YesNo);
         }
         //Cyan is a furry
         private void button4_Click(object sender, EventArgs e)
@@ -1058,21 +1337,24 @@ namespace QuickNoodle
             //MessageBox.Show(cyan[random.Next(cyan.Length)]);
             #endregion
             // stop looking at my source code 
-            MessageBox.Show("Cyan is a furry");
+            System.Windows.Forms.MessageBox.Show("Cyan is a furry");
             
         }
+        // Convert
         private void button3_Click(object sender, EventArgs e)
         {
             dynamic bookmarks = mapObject._customData._bookmarks;
 
-            List<string> flags = parseBookmarks(bookmarks, mapObject);
+            Thread t = new Thread(() => parseBookmarks(bookmarks, mapObject));
+            t.IsBackground = true;
+            t.Start();
 
 
         }
         private void label1_Click(object sender, EventArgs e)
         {
 
-            MessageBox.Show("Why the fuck did you click the text???", "Retard", MessageBoxButtons.YesNo);
+            System.Windows.Forms.MessageBox.Show("Why the fuck did you click the text???", "Retard", MessageBoxButtons.YesNo);
         }
         #endregion
         private void save_Click(object sender, EventArgs e)
@@ -1098,12 +1380,12 @@ namespace QuickNoodle
             }
 
         }
-
+        // ????
         private void button5_Click(object sender, EventArgs e)
         {
 
         }
-
+        // What do you think this does, give me a wild guess
         private void parseNoodleFile(dynamic obj)
         {
             if (!obj.ContainsKey("bookmarks"))
@@ -1119,7 +1401,7 @@ namespace QuickNoodle
             {
                 log.WriteLine(bookmark.ToString());
             }
-        } 
+        }
         // Open noodle file
         private void button5_Click_1(object sender, EventArgs e)
         {
@@ -1169,7 +1451,7 @@ namespace QuickNoodle
         {
             System.Diagnostics.Process.Start("https://github.com/TheShibeGuy/QuickNoodle/blob/master/README.md#help");
         }
-
+        // Log
         private void button2_Click(object sender, EventArgs e)
         {
             
@@ -1186,12 +1468,47 @@ namespace QuickNoodle
             }
             
         }
-
+        // Preset Creator
         private void button3_Click_1(object sender, EventArgs e)
         {
             PresetCreator pc = new PresetCreator();
             pc.Show();
         }
-    }
+        // ???
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
 
+        }
+        // ???
+        private void toolTip1_Popup(object sender, PopupEventArgs e)
+        {
+
+        }
+        // Expand
+        private void button5_Click_2(object sender, EventArgs e)
+        {
+            if (Size.Width == 460)
+            {
+                Size = new Size(768, 300);
+                expand.Text = "<-";
+            } else if(Size.Width == 768)
+            {
+                Size = new Size(460, 300);
+                // this.SetBounds(this.Bounds.X, this.Bounds.Y, 460, 300);
+
+                expand.Text = "->";
+            }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            Size = new Size(460, 300);
+        }
+
+        private void argEditorButton_Click(object sender, EventArgs e)
+        {
+            ArguimentEditor ae = new ArguimentEditor();
+            ae.Show();
+        }
+    }
 }

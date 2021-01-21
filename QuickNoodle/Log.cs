@@ -12,9 +12,9 @@ namespace QuickNoodle
 {
     public partial class Log : Form
     {
-        Form1 autism;
+        Form1 autism; 
         public Log(Form1 f)
-        {
+        { 
             autism = f;
             InitializeComponent();
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Log_Closing);
@@ -36,12 +36,20 @@ namespace QuickNoodle
                 return;
             }
             
-            logbox.Text += s + Environment.NewLine;
+            logbox.AppendText(s + Environment.NewLine);
+            
+            logbox.ScrollToCaret();
         }
 
         private void logbox_TextChanged(object sender, EventArgs e)
         {
 
         }
+
+        private void Log_Load(object sender, EventArgs e)
+        {
+
+        }
+        
     }
 }

@@ -36,11 +36,12 @@
             this.logbox.BackColor = System.Drawing.SystemColors.Control;
             this.logbox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.logbox.Location = new System.Drawing.Point(10, 12);
+            this.logbox.MaximumSize = new System.Drawing.Size(281, 1080);
             this.logbox.Multiline = true;
             this.logbox.Name = "logbox";
             this.logbox.ReadOnly = true;
             this.logbox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.logbox.Size = new System.Drawing.Size(279, 950);
+            this.logbox.Size = new System.Drawing.Size(281, 449);
             this.logbox.TabIndex = 0;
             this.logbox.TextChanged += new System.EventHandler(this.logbox_TextChanged);
             // 
@@ -54,6 +55,7 @@
             this.MaximumSize = new System.Drawing.Size(319, 1000);
             this.Name = "Log";
             this.Text = "Log";
+            this.Load += new System.EventHandler(this.Log_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
