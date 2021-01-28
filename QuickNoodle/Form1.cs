@@ -1264,7 +1264,7 @@ namespace QuickNoodle
                     progressBar2.PerformStep();
                 }));
             }
-            // fuck you 
+            
             // you dont get comments
             // definitely not just lazy
             for ( int i = 0; i < mapCopy._obstacles.Count; i++)

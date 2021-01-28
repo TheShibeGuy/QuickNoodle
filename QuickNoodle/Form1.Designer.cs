@@ -294,7 +294,7 @@ namespace QuickNoodle
             // 
             // progressBar2
             // 
-            this.progressBar2.Location = new System.Drawing.Point(612, 163);
+            this.progressBar2.Location = new System.Drawing.Point(612, 169);
             this.progressBar2.Name = "progressBar2";
             this.progressBar2.Size = new System.Drawing.Size(128, 23);
             this.progressBar2.Step = 1;
