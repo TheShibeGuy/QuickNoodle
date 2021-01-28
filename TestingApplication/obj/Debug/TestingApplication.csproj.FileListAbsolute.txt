@@ -1,0 +1,7 @@
+C:\Users\Blake\source\repos\QuickNoodle\TestingApplication\bin\Debug\TestingApplication.exe.config
+C:\Users\Blake\source\repos\QuickNoodle\TestingApplication\bin\Debug\TestingApplication.exe
+C:\Users\Blake\source\repos\QuickNoodle\TestingApplication\bin\Debug\TestingApplication.pdb
+C:\Users\Blake\source\repos\QuickNoodle\TestingApplication\obj\Debug\TestingApplication.csproj.CoreCompileInputs.cache
+C:\Users\Blake\source\repos\QuickNoodle\TestingApplication\obj\Debug\TestingApplication.exe
+C:\Users\Blake\source\repos\QuickNoodle\TestingApplication\obj\Debug\TestingApplication.pdb
+C:\Users\Blake\source\repos\QuickNoodle\TestingApplication\obj\Debug\TestingApplication.csprojAssemblyReference.cache
