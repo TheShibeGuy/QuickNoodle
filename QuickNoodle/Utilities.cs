@@ -64,7 +64,40 @@ namespace QuickNoodle
             
         }
 
-          
+        internal static void addFloatArrayToNoteObject(JObject gameObject, int type, int defaultValue, string name, float[] array)
+        {
+            if((int) gameObject["type"] == type)
+            {
+                if (array[0] != defaultValue)
+                {
+                    addOrUpdateElement(((JObject)gameObject["_customData"]), name, array, JType.JArray);
+                }
+                else
+                {
+                    if(elementDoesHaveKey((JObject)gameObject["_customData"], name))
+                    {
+                        ((JObject)gameObject["_customData"]).Remove(name);
+                    }
+                }
+            }
+        }
+        internal static void addFloatToNoteObject(JObject gameObject, int type, int defaultValue, string name, float value)
+        {
+            if ((int)gameObject["type"] == type || type == -1)
+            {
+                if (value != defaultValue)
+                {
+                    addOrUpdateElement(((JObject)gameObject["_customData"]), name, value, JType.JValue);
+                }
+                else
+                {
+                    if (elementDoesHaveKey((JObject) gameObject["_customData"], name))
+                    {
+                        ((JObject) gameObject["_customData"]).Remove(name);
+                    }
+                }
+            }
+        }
     }
     public struct RotationValue
     {

@@ -861,25 +861,26 @@ namespace QuickNoodle
             float[] eventReds,
             float[] eventBlues,
 
+            // Ring Spin Stuff
             string ringNameFilter,
             float  ringRotation,
             float  ringProp,  
-            float  speed,          // well no shit this controls the speed
+            float  speed,          
             int    direction,     // 0 ccw, 1 cw, 2 opposite of previous, random if first
 
             // These three are so obvious if you dont get it you're stupid
-            float[] /* Float for each color */ wallColor,
+            float[] wallColor,
             float[] worldRotation,
             float[] noteRotation,
 
-            int rotation,
-            float noteSpawnOffset,
-            float noteJumpSpeed,
-            bool isNull,
-            float time,
-            dynamic mapCopy,
-            dynamic next,
-            int bookmarkNumber
+            int rotation, // 360 characteristic
+            float noteSpawnOffset, // Obvious
+            float noteJumpSpeed, // Even More Obvious
+            bool isNull, // No clue what this does
+            float time, // Bookmark time
+            dynamic mapCopy, // used, but redundant. I did this before I learned what a pointer is
+            dynamic next, // unused?
+            int bookmarkNumber // used like once
             )
         {
 
@@ -919,8 +920,29 @@ namespace QuickNoodle
 
                 });
             }
-            
-            
+            // new notes loop
+            for (int i = 0; i < mapCopy._notes.Count; i++)
+            {
+                JObject _note = mapCopy._notes[i];
+
+                Utilities.addFloatArrayToNoteObject(_note, 0, -1, "_color", reds);
+                Utilities.addFloatArrayToNoteObject(_note, 0, -1, "_color", noteReds);
+                Utilities.addFloatArrayToNoteObject(_note, 1, -1, "_color", blues);
+                Utilities.addFloatArrayToNoteObject(_note, 1, -1, "_color", noteBlues);
+
+                Utilities.addFloatToNoteObject(_note, -1, -1, "_noteJumpMovementSpeed", noteJumpSpeed);
+                Utilities.addFloatToNoteObject(_note, -1, -1, "_noteJumpStartBeatOffset", noteSpawnOffset);
+
+
+                Utilities.addFloatToNoteObject(_note, -1, -1, "_rotation", noteSpawnOffset);
+                Utilities.addFloatToNoteObject(_note, -1, -1, "_localRotation", noteSpawnOffset);
+
+
+
+            }
+            // old notes loop 
+
+            // Comment this out when the new one is done
             for ( int i = 0; i < mapCopy._notes.Count; i++)
             {
                     dynamic _note = mapCopy._notes[i];
@@ -1001,6 +1023,9 @@ namespace QuickNoodle
                     // type 0 is red, type 1 is blue
                     lock (noteLock)
                     {
+
+                        
+
                         if (_note._type == 0)
                         {
                             if (noteReds[0] >= 0)
@@ -1300,119 +1325,6 @@ namespace QuickNoodle
             log.WriteLine($"Finished processing the {bookmarkNumber}nd bookmark in {length.Elapsed.Seconds} seconds");
             
         }
-        /*
-        private List<string> parseText(String s, float time)
-        {
-            
-            string[] converted = s.ToLower().Split(' ');
-
-
-            string[] arguments = new string[] { "njs", "offset", "r", "b", "worldrotation", "noterotation", "standard"};
-            
-            float njs = 0.0f;
-            float offset = -69420;
-
-            float[] redColor = new float[] { 1000, 0, 0 };
-            float[] blueColor = new float[] { 1000, 0, 0 };
-
-            float[] worldRotation = new float[] { 0, 0, 0 };
-            float[] noteRotation = new float[] { 0, 0, 0 };
-            List<string> flags = new List<string>();
-            foreach (string arg in converted)
-            {
-                
-                string[] argument = arg.Split('=');
-                int index = Array.IndexOf(arguments, argument[0]);
-                if (index > -1)
-                {
-                    #region sex
-                    /* {
-	                    "_time": 100,
-	                    "_data": {
-		                    "njs": 24,
-		                    "offset": 0.1,
-		                    "colors": [{
-			                    "r": 1,
-			                    "g": 1,
-			                    "b": 1
-		                    }, {
-			                    "r": 1,
-			                    "g": 1,
-			                    "b": 1
-		                    }],
-		                    "worldRotation": {
-			                    "x": 0,
-			                    "y": 0,
-			                    "z": 0
-		                    },
-		                    "noteRotation": {
-			                    "x": 0,
-			                    "y": 0,
-			                    "z": 0
-		                    }
-	                    }
-                    }
-#endregion
-                    switch (argument[0])
-                    {
-                        case "njs":
-                            njs = float.Parse(argument[1]);
-                            break;
-                        case "offset":
-                            offset = float.Parse(argument[1]);
-                            break;
-                        case "b":
-                            string[] blue = argument[1].Split(',');
-                            blueColor[0] = float.Parse(blue[0]);
-                            blueColor[1] = float.Parse(blue[1]);
-                            blueColor[2] = float.Parse(blue[2]);
-                            break;
-                        case "r":
-                            string[] red = argument[1].Split(',');
-                            redColor[0] = float.Parse(red[0]);
-                            redColor[1] = float.Parse(red[1]);
-                            redColor[2] = float.Parse(red[2]);
-                            break;
-
-                        case "worldrotation":
-                            string[] rotate = argument[1].Split(',');
-                            worldRotation[0] = float.Parse(rotate[0]);
-                            worldRotation[1] = float.Parse(rotate[1]);
-                            worldRotation[2] = float.Parse(rotate[2]);
-                            break;
-                        case "noterotation":
-                            string[] noterotate = argument[1].Split(',');
-                            noteRotation[0] = float.Parse(noterotate[0]);
-                            noteRotation[1] = float.Parse(noterotate[1]);
-                            noteRotation[2] = float.Parse(noterotate[2]);
-                            break;
-                        case "standard":
-                            string galf = $"{{\"_time\":{time}, \"isNull\": true}}";
-                            flags.Add(galf);
-                            continue;
-                            
-                    }
-                    // Success, is in array
-                    // Console.WriteLine($"{{\"r\":{blueColor[0]},\"g\":{blueColor[1]},\"b\":{blueColor[2]}}}");
-                    string flag = $"{{\"_time\":{time}, \"isNull\": false, \"_data\":{{\"njs\":{njs},\"offset\":{offset},\"colors\":[{{\"r\":{redColor[0]},\"g\":{redColor[1]},\"b\":{redColor[2]}}},{{\"r\":{blueColor[0]},\"g\":{blueColor[1]},\"b\":{blueColor[2]}}}],\"worldRotation\":{{\"x\":{worldRotation[0]},\"y\":{worldRotation[1]},\"z\":{worldRotation[2]}}},\"noteRotation\":{{\"x\":{noteRotation[0]},\"y\":{noteRotation[1]},\"z\":{noteRotation[2]}}}}}}}";
-                    flags.Add(flag);
-                } else
-                {
-                    continue;
-                }
-
-            }
-            /*int pos = 0;
-            for (int i = 0; i < flags.Count; i += 2, pos++)
-            {
-                flags[pos] = flags[i];
-                flags[pos] = flags[i - 1];
-            }
-            flags.RemoveRange(pos, flags.Count - pos);
-            IEnumerable<string> query = flags.Where((x, i) => i % 2 == 1);
-            flags = query.ToList();
-            return flags;
-        }*/
         #region funnies
         private void label1_Click_1(object sender, EventArgs e)
         {
