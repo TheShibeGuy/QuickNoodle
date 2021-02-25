@@ -99,9 +99,9 @@ namespace QuickNoodle
             while (true)
             {
                 string elapsedS;
-                if (time.Elapsed.TotalMinutes % 1 == 0)
+                if (time.Elapsed.TotalMinutes > 0)
                 {
-                    elapsedS = time.Elapsed.ToString(@"mm min ss\.ff sec") + " elapsed";
+                    elapsedS = time.Elapsed.ToString(@"mm\:ss\.ff") + " elapsed";
                     
                 } else
                 {
@@ -235,7 +235,7 @@ namespace QuickNoodle
                                     if (argHex[0] >= 0)
                                     {
                                         noteReds = argHex.Select(x => ((float)x) / 255).ToArray();
-                                        log.WriteLine($"Red Colors: {noteRed[0]}, {noteRed[1]}, {noteRed[2]}");
+                                        log.WriteLine($"Red Colors: {noteReds[0]}, {noteReds[1]}, {noteReds[2]}");
                                         break;
                                     }
                                     log.WriteLine("Note Red color only has one value, skipping");
@@ -261,7 +261,7 @@ namespace QuickNoodle
                                     }
                                     if (i == 2)
                                     {
-                                        log.WriteLine($"Red Colors: {noteRed[0]}, {noteRed[1]}, {noteRed[2]}");
+                                        log.WriteLine($"Red Colors: {noteReds[0]}, {noteReds[1]}, {noteReds[2]}");
                                     }
 
                                 }
@@ -1108,13 +1108,13 @@ namespace QuickNoodle
 
                 
             }
-            progressBar2.Invoke(new Action(() =>
+            /*progressBar2.Invoke(new Action(() =>
             {
                 progressBar2.Maximum = mapCopy["_events"].Count;
                 progressBar2.Minimum = 1;
                 progressBar2.Value = 1;
                 progressBar2.Step = 1;
-            }));
+            }));*/
             for ( int i = 0; i < mapCopy._events.Count; i++)
             {
                 dynamic _event;
@@ -1284,10 +1284,10 @@ namespace QuickNoodle
                 }
 
 
-                progressBar2.Invoke(new Action(() =>
+                /*progressBar2.Invoke(new Action(() =>
                 {
                     progressBar2.PerformStep();
-                }));
+                }));*/
             }
             
             // you dont get comments
@@ -1462,12 +1462,17 @@ namespace QuickNoodle
             
             if ( log.Visible )
             {
-                log.Hide();
+                log.Invoke(new Action(() => {
+                    log.Hide();
+                }));
                 button2.Text = "Open log";
             }
             else
             {
-                log.Show();
+                log.Invoke(new Action(() => {
+                    log.Show();
+                }));
+                
                 button2.Text = "Close log";
             }
             

@@ -66,6 +66,9 @@
     <Compile Include="ArgumentControl.Designer.cs">
       <DependentUpon>ArgumentControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Bookmark.cs" />
+    <Compile Include="BookmarkParser.cs" />
+    <Compile Include="BookmarkProperty.cs" />
     <Compile Include="DataType.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

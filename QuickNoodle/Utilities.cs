@@ -66,7 +66,7 @@ namespace QuickNoodle
 
         internal static void addFloatArrayToNoteObject(JObject gameObject, int type, int defaultValue, string name, float[] array)
         {
-            if((int) gameObject["type"] == type)
+            if((int) gameObject["_type"] == type)
             {
                 if (array[0] != defaultValue)
                 {
@@ -83,7 +83,7 @@ namespace QuickNoodle
         }
         internal static void addFloatToNoteObject(JObject gameObject, int type, int defaultValue, string name, float value)
         {
-            if ((int)gameObject["type"] == type || type == -1)
+            if ((int)gameObject["_type"] == type || type == -1)
             {
                 if (value != defaultValue)
                 {
