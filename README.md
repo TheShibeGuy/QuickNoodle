@@ -18,15 +18,15 @@ Preset does nothing and is a stand in too.<br>
 
 **All Color values can be RGB (ex: B=0,128,255) OR HexRGB (ex: B=#0080ff)**<br>
 **B:** Syntax of Blue Notes and Lighting Events (ex: B=20,75,200)<br>
-**R:** Syntax of Red Notes and Lighting Events (ex: B=200,75,20)<br>
+**R:** Syntax of Red Notes and Lighting Events (ex: R=200,75,20)<br>
 
 **All syntax below is specific to what is specified. It will not chromatize anything outside of what is specified**<br>
 **NB and NR** are the syntax specific to Blue Notes and Red Notes respectively (ex: NB=20,75,200)<br>
 **LB and LR** are the syntax specific to Blue Lights and Red Lights respectively (ex: LR=20,75,200)<br>
-**WC** is the syntax specific to Walls (ex: WC=#8f008f)<br>
+**WC** is the specific to Walls (ex: WC=#8f008f)<br>
 **NB, NR, LB, and LR will override B and R.**<br>
 
-### Custom Spins
+### Custom Spins *Kinda maybe broken a lil*
 **ringName:** you can have Small or Big here. This determines what the custom spin affects (ex: ringName=Big) (string)<br>
 **Speed:** Determines how fast your spins will move (ex: Speed=2.0) (float)<br>
 **Prop OR Propagation OR Delay:** higher numbers will make the rings move snappier and make the back rings more in sync with the front (ex: Delay=2.0) (float)<br>
@@ -39,6 +39,8 @@ Preset does nothing and is a stand in too.<br>
 
 **WorldRotation:** rotation and movement direction of notes, walls and bombs (like how 360 maps look). (Ex: WorldRotation=0,90,0) (float of any x,y,z coordinates between 0-360) (float)<br>
 **NoteRotation:** rotates the look direction of a note (like making the note look towards the left) (Ex: NoteRotation=0,0,10) (float of any x,y,z coordinates between 0-360) (float)<br>
+
+### Vanilla
 **360:** Adds a 360 rotation event  (Ex: 360=-30) (Note that because Beat Games is dumb the only supported rotations are: -60, -45, -30, -15, 15, 30, 45, 60) (int)<br>
 
 ## Usage
